@@ -1,0 +1,11 @@
+{
+  "Version": 1,
+  "Hash": "kqORfPU3cCxrE+CsDHdxv5Xzw7jVO28ow5GMDNDEAp4=",
+  "Source": "ChefsFeed-backend",
+  "BasePath": "_content/ChefsFeed-backend",
+  "Mode": "Default",
+  "ManifestType": "Build",
+  "ReferencedProjectsConfiguration": [],
+  "DiscoveryPatterns": [],
+  "Assets": []
+}
