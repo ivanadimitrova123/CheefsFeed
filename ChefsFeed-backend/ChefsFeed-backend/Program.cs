@@ -57,9 +57,11 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
 
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IPictureService, PictureService>();
+builder.Services.AddScoped<IFollowService, FollowService>();
+
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IPictureRepository, PictureRepository>();
-
+builder.Services.AddScoped<IFollowRepository, FollowRepository>();
 
 //password
 builder.Services.AddScoped<IPasswordHasher<User>, PasswordHasher<User>>();

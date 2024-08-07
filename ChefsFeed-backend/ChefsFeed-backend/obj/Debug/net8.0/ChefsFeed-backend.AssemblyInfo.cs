@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("ChefsFeed-backend")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+1c8e1dca657ea543cf35f33192ffb8e2e7d07f7c")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+008775d0be1f65bc241dfd75075ffb3d32893fc8")]
 [assembly: System.Reflection.AssemblyProductAttribute("ChefsFeed-backend")]
 [assembly: System.Reflection.AssemblyTitleAttribute("ChefsFeed-backend")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
