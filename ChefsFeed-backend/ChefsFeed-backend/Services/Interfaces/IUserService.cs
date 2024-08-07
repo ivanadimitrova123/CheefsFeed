@@ -10,10 +10,7 @@ namespace ChefsFeed_backend.Services.Interfaces
         Task<User> GetCurrentUserInfoAsync(long userId);
         Task RegisterUserAsync(User user);
         Task<string> LoginUserAsync(LogInUserDto model);
+        Task<IEnumerable<UserDto>> SearchUsersAsync(string text);
         
-         Task<IEnumerable<UserDto>> SearchUsersAsync(string text);
-        /* 
-        Task<UserDto> GetUserProfileAsync(long userId);
-         */
     }
 }

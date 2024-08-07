@@ -37,7 +37,7 @@ public class AccountController : ControllerBase
            var userDtos = await _userService.SearchUsersAsync(text);
            return Ok(userDtos);
        }
-    /*
+    
        [HttpGet("user/{userId}")]
        public async Task<IActionResult> GetUserProfile(long userId)
        {
@@ -49,7 +49,7 @@ public class AccountController : ControllerBase
 
            return Ok(userDto);
        }
-    */
+    
     [HttpGet("current")]
     public async Task<IActionResult> GetCurrentUserInfo()
     {

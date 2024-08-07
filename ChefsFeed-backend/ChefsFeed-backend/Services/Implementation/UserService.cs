@@ -113,8 +113,8 @@ namespace ChefsFeed_backend.Services.Implementation
             return tokenString;
         }
 
-        
-      public async Task<IEnumerable<UserDto>> SearchUsersAsync(string text)
+
+        public async Task<IEnumerable<UserDto>> SearchUsersAsync(string text)
         {
             var users = await _userRepository.SearchUsersAsync(text);
             return users.Select(user => new UserDto(
@@ -129,39 +129,7 @@ namespace ChefsFeed_backend.Services.Implementation
                  user.Role
              ));
         }
-        /*
-        public async Task<UserDto> GetUserProfileAsync(long userId)
-        {
-            var user = await _userRepository.GetUserByIdAsync(userId);
 
-            if (user == null) return null;
-
-            return new UserDto
-            {
-                Id = user.Id,
-                Username = user.Username,
-                FirstName = user.FirstName,
-                LastName = user.LastName,
-                Email = user.Email,
-                ProfilePictureUrl = user.ProfilePictureId != null
-                    ? $"{_httpContextAccessor.HttpContext.Request.Scheme}://{_httpContextAccessor.HttpContext.Request.Host}/api/image/{user.ProfilePictureId}"
-                    : null,
-                Recipes = user.Recipes.Select(recipe => new RecipeDto
-                {
-                    Id = recipe.Id,
-                    Name = recipe.Name,
-                    PictureId = recipe.PictureId,
-                    RecipeImage = recipe.PictureId != null
-                        ? $"{_httpContextAccessor.HttpContext.Request.Scheme}://{_httpContextAccessor.HttpContext.Request.Host}/api/image/{recipe.PictureId}"
-                        : null,
-                    Rating = recipe.Rating,
-                    CommentsCount = _context.Comments.Count(c => c.RecipeId == recipe.Id)
-                }).ToList(),
-                FollowingCount = user.Following.Count,
-                FollowersCount = user.Followers.Count
-            };
-        }
-     */
     }
 
 }

@@ -48,17 +48,8 @@ namespace ChefsFeed_backend.Repositories.Implementation
                 .Take(3)
                 .ToListAsync();
         }
-        /*
-        public async Task<User> GetUserByIdAsync(long userId)
-        {
-            return await _context.Users
-                .Include(u => u.Following)
-                .Include(u => u.Followers)
-                .Include(u => u.Recipes)
-                .Include(u => u.ProfilePicture)
-                .FirstOrDefaultAsync(u => u.Id == userId);
-        }
-         */
+        
+         
         public async Task SaveChangesAsync()
         {
             await _context.SaveChangesAsync();
