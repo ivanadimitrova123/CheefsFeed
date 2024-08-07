@@ -6,6 +6,10 @@ using Microsoft.IdentityModel.Tokens;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using System.Text;
 using Microsoft.OpenApi.Models;
+using ChefsFeed_backend.Services.Implementation;
+using ChefsFeed_backend.Services.Interfaces;
+using ChefsFeed_backend.Repositories.Implementation;
+using ChefsFeed_backend.Repositories.Interfaces;
 //using ChefsFeed_backend.Business.Interfaces;
 //using ChefsFeed_backend.Business.Services;
 //using ChefsFeed_backend.Data.Interfaces;
@@ -15,6 +19,7 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+builder.Services.AddHttpContextAccessor();
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
@@ -49,6 +54,13 @@ builder.Services.AddSwaggerGen(options =>
 //database
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
+
+builder.Services.AddScoped<IUserService, UserService>();
+builder.Services.AddScoped<IPictureService, PictureService>();
+builder.Services.AddScoped<IUserRepository, UserRepository>();
+builder.Services.AddScoped<IPictureRepository, PictureRepository>();
+
+
 //password
 builder.Services.AddScoped<IPasswordHasher<User>, PasswordHasher<User>>();
 
@@ -73,7 +85,8 @@ builder.Services.AddAuthentication(options =>
 });
 //builder.Services.AddAuthorization(options =>
 //{
-//    options.AddPolicy("AdminPolicy", policy => policy.RequireRole("Admin"));
+//    options.AddPol
+//    icy("AdminPolicy", policy => policy.RequireRole("Admin"));
 //});
 
 

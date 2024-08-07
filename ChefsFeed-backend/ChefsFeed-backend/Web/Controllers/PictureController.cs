@@ -1,34 +1,27 @@
 ﻿namespace ChefsFeed_backend.Web.Controllers;
-using System.Net.Mime;
 using System.Security.Claims;
 using ChefsFeed_backend.Data.Models;
 using ChefsFeed_backend.Data;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using ChefsFeed_backend.Services.Interfaces;
 
-
+//upload  getId
 [Route("api/image")]
 [ApiController]
-
 public class PictureController : ControllerBase
 {
-    private readonly ApplicationDbContext _context;
+    private readonly IPictureService _pictureService;
 
-    public PictureController(ApplicationDbContext context)
+    public PictureController(IPictureService pictureService)
     {
-        _context = context;
+        _pictureService = pictureService;
     }
 
     [HttpPost]
     [Authorize]
     public async Task<IActionResult> UploadImage(IFormFile file)
     {
-        if (file == null || file.Length == 0)
-        {
-            return BadRequest(new { error = "Invalid file" });
-        }
-
-        // Get the currently logged-in user
         var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier);
         if (userIdClaim == null)
         {
@@ -37,51 +30,33 @@ public class PictureController : ControllerBase
 
         if (long.TryParse(userIdClaim.Value, out long userId))
         {
-            // Find the user by ID
-            var user = _context.Users.FirstOrDefault(u => u.Id == userId);
-
-            if (user == null)
+            try
             {
-                return NotFound(new { error = "User not found" });
-            }
-
-            using (var memoryStream = new MemoryStream())
-            {
-                await file.CopyToAsync(memoryStream);
-                var image = new Picture
-                {
-                    FileName = file.FileName,
-                    ImageData = memoryStream.ToArray(),
-                    ContentType = file.ContentType
-                };
-
-                _context.Pictures.Add(image);
-                await _context.SaveChangesAsync();
-                // Set the user's ProfilePictureId to the ID of the uploaded Picture
-                user.ProfilePictureId = image.Id;
-                await _context.SaveChangesAsync();
-                // Construct the image URL based on your server's URL and the image's ID
-                string imageUrl = $"{HttpContext.Request.Scheme}://{HttpContext.Request.Host}/api/image/{image.Id}";
-
-                // Return the image URL in the response
+                var imageUrl = await _pictureService.UploadImageAsync(file, userId);
                 return Ok(new { imageUrl });
             }
+            catch (ArgumentException ex)
+            {
+                return BadRequest(new { error = ex.Message });
+            }
+            catch (KeyNotFoundException ex)
+            {
+                return NotFound(new { error = ex.Message });
+            }
         }
+
         return NotFound(new { error = "User not found or conversion failed" });
     }
 
-
-
     [HttpGet("{id}")]
-    public IActionResult GetImage(long id)
+    public async Task<IActionResult> GetImage(long id)
     {
-        var image = _context.Pictures.Find(id);
-
-        if (image == null)
+        var imageData = await _pictureService.GetImageAsync(id);
+        if (imageData == null)
         {
             return NotFound("Image not found");
         }
-        return File(image.ImageData, image.ContentType);
 
+        return File(imageData, "image/jpeg"); // Use the appropriate content type here
     }
 }
