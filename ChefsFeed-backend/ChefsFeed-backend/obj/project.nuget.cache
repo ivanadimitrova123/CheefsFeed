@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "NZ6WXJ5ypXEpFooo6G/Dc/sgUMy8lAKOY359oHXHnPwjPW/o/9glX4NFumZy2fu/+x4/3L1/6qzjw4ZpAVO5Bw==",
+  "dgSpecHash": "wxEMJKVT27EdxWKZy2/W7evKKArt8jYCmmssOl8fXXTYhmYri8Z+7h9Yp2+/lhkOVn66+tgeQUd2D7NZDTbLrw==",
   "success": true,
-  "projectFilePath": "C:\\Users\\ivana\\Desktop\\ChefsFeed\\ChefsFeed-backend\\ChefsFeed-backend\\ChefsFeed-backend.csproj",
+  "projectFilePath": "C:\\Users\\ivana\\Desktop\\CheefsFeed\\CheefsFeed\\ChefsFeed-backend\\ChefsFeed-backend\\ChefsFeed-backend.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\ivana\\.nuget\\packages\\automapper\\13.0.1\\automapper.13.0.1.nupkg.sha512",
     "C:\\Users\\ivana\\.nuget\\packages\\humanizer.core\\2.14.1\\humanizer.core.2.14.1.nupkg.sha512",
