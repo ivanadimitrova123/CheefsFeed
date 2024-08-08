@@ -23,5 +23,7 @@ public class User
     public ICollection<User> Following { get; set; } = new List<User>();
     [JsonIgnore]
     public ICollection<User> Followers { get; set; } = new List<User>();
+    public ICollection<UserSavedRecipe> SavedRecepies { get; set; } = new List<UserSavedRecipe>();
+
     public string Role { get; set; } = "User";
 }

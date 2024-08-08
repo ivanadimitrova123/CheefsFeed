@@ -1,8 +1,5 @@
 ﻿namespace ChefsFeed_backend.Web.Controllers;
 using System.Security.Claims;
-using ChefsFeed_backend.Data.Models.Dtos;
-using ChefsFeed_backend.Data;
-using ChefsFeed_backend.Data.Models;
 using ChefsFeed_backend.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 

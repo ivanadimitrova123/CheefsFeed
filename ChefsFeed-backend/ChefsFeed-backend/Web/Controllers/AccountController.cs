@@ -1,16 +1,10 @@
 ﻿namespace ChefsFeed_backend.Web.Controllers;
-using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using ChefsFeed_backend.Data.Models;
-using Microsoft.IdentityModel.Tokens;
 using ChefsFeed_backend.Data.Models.Dtos;
-using ChefsFeed_backend.Data;
 using ChefsFeed_backend.Services.Interfaces;
-
-//get +getID +search getCurrent register login
 
 [Route("api/account")]
 [ApiController]

@@ -1,6 +1,7 @@
 ﻿namespace ChefsFeed_backend.Data;
 
 using ChefsFeed_backend.Data.Models;
+using System.Collections.Generic;
 
 public class ApplicationDbContext : DbContext
 {
@@ -11,6 +12,7 @@ public class ApplicationDbContext : DbContext
     public DbSet<Picture> Pictures { get; set; }
     public DbSet<Category> Category { get; set; }
     public DbSet<Comment> Comments { get; set; }
+    public DbSet<UserSavedRecipe> UserSavedRecipe { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -43,6 +45,19 @@ public class ApplicationDbContext : DbContext
                 .WithMany(c => c.Children)
                 .HasForeignKey(c => c.ParentId);
         });
+
+        modelBuilder.Entity<UserSavedRecipe>()
+                .HasKey(usr => new { usr.UserId, usr.RecipeId });
+
+        modelBuilder.Entity<UserSavedRecipe>()
+            .HasOne(usr => usr.User)
+            .WithMany(u => u.SavedRecepies)
+            .HasForeignKey(usr => usr.UserId);
+
+        modelBuilder.Entity<UserSavedRecipe>()
+            .HasOne(usr => usr.Recipe)
+            .WithMany(r => r.SavedRecepies)
+            .HasForeignKey(usr => usr.RecipeId);
 
     }
 }
