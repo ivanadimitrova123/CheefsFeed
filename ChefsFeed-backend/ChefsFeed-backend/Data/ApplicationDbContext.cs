@@ -9,7 +9,7 @@ public class ApplicationDbContext : DbContext
     public DbSet<User> Users { get; set; }
     public DbSet<Recipe> Recipes { get; set; }
     public DbSet<Picture> Pictures { get; set; }
-    public DbSet<Category> Categories { get; set; }
+    public DbSet<Category> Category { get; set; }
     public DbSet<Comment> Comments { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
