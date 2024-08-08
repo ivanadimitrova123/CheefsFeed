@@ -31,6 +31,7 @@ public class Recipe
     public string Yield { get; set; } = string.Empty;
     public float Rating { get; set; } = 0;
     public ICollection<UserSavedRecipe> SavedRecepies { get; set; } = new List<UserSavedRecipe>();
+    public ICollection<UserGrades> UsersGrades { get; set; } = new List<UserGrades>();
 
     public ICollection<Category> Categories { get; set; } = new List<Category>();
 

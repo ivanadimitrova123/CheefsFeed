@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using ChefsFeed_backend.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -12,9 +13,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace ChefsFeed_backend.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240808184006_AddedGradesMigration")]
+    partial class AddedGradesMigration
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -207,24 +210,6 @@ namespace ChefsFeed_backend.Data.Migrations
                     b.ToTable("Users");
                 });
 
-            modelBuilder.Entity("ChefsFeed_backend.Data.Models.UserGrades", b =>
-                {
-                    b.Property<long>("UserId")
-                        .HasColumnType("bigint");
-
-                    b.Property<long>("RecipeId")
-                        .HasColumnType("bigint");
-
-                    b.Property<int>("Grade")
-                        .HasColumnType("integer");
-
-                    b.HasKey("UserId", "RecipeId");
-
-                    b.HasIndex("RecipeId");
-
-                    b.ToTable("UserGrades");
-                });
-
             modelBuilder.Entity("ChefsFeed_backend.Data.Models.UserSavedRecipe", b =>
                 {
                     b.Property<long>("UserId")
@@ -314,25 +299,6 @@ namespace ChefsFeed_backend.Data.Migrations
                     b.Navigation("ProfilePicture");
                 });
 
-            modelBuilder.Entity("ChefsFeed_backend.Data.Models.UserGrades", b =>
-                {
-                    b.HasOne("ChefsFeed_backend.Data.Models.Recipe", "Recipe")
-                        .WithMany("UsersGrades")
-                        .HasForeignKey("RecipeId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("ChefsFeed_backend.Data.Models.User", "User")
-                        .WithMany("UsersGrades")
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Recipe");
-
-                    b.Navigation("User");
-                });
-
             modelBuilder.Entity("ChefsFeed_backend.Data.Models.UserSavedRecipe", b =>
                 {
                     b.HasOne("ChefsFeed_backend.Data.Models.Recipe", "Recipe")
@@ -377,8 +343,6 @@ namespace ChefsFeed_backend.Data.Migrations
                     b.Navigation("Categories");
 
                     b.Navigation("SavedRecepies");
-
-                    b.Navigation("UsersGrades");
                 });
 
             modelBuilder.Entity("ChefsFeed_backend.Data.Models.User", b =>
@@ -386,8 +350,6 @@ namespace ChefsFeed_backend.Data.Migrations
                     b.Navigation("Recipes");
 
                     b.Navigation("SavedRecepies");
-
-                    b.Navigation("UsersGrades");
                 });
 #pragma warning restore 612, 618
         }
