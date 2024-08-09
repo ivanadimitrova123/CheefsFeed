@@ -82,8 +82,10 @@ public class RecipeController : ControllerBase
     {
         var userId = GetUserIdFromClaims();
 
-        // Optionally: Check if user is authorized to edit (e.g., Admin or owner)
-        // ...
+        if (updatedRecipe.UserId != userId)
+        {
+            return Forbid("You are not authorized to edit this recipe.");
+        }
 
         byte[] photoData = null;
         string photoContentType = null;

@@ -15,7 +15,8 @@ public class ApplicationDbContext : DbContext
     public DbSet<UserSavedRecipe> UserSavedRecipe { get; set; }
     public DbSet<UserGrades> UserGrades { get; set; }
 
-
+    public DbSet<ReportedComment> ReportedComments { get; set; }
+    public DbSet<ReportedRecipe> ReportedRecipes { get; set; }
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.Entity<Recipe>()
@@ -73,6 +74,16 @@ public class ApplicationDbContext : DbContext
             .HasOne(ug => ug.Recipe)
             .WithMany(r => r.UsersGrades)
             .HasForeignKey(ug => ug.RecipeId);
+
+        modelBuilder.Entity<ReportedComment>()
+                .HasKey(rc => new { rc.UserId, rc.CommentId });
+
+        modelBuilder.Entity<ReportedRecipe>()
+            .HasKey(rr => new { rr.UserId, rr.RecipeId });
+
+
+
+        base.OnModelCreating(modelBuilder);
     }
 }
 

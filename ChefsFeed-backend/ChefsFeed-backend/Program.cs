@@ -63,6 +63,8 @@ builder.Services.AddScoped<IRecipeService, RecipeService>();
 builder.Services.AddScoped<IUserSavedRecipesService, UserSavedRecipesService>();
 builder.Services.AddScoped<IUserGradesService, UserGradesService>();
 builder.Services.AddScoped<ICommentService, CommentService>();
+builder.Services.AddScoped<IReportedRecipeService, ReportedRecipeService>();
+builder.Services.AddScoped<IReportedCommentService, ReportedCommentService>();
 
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IPictureRepository, PictureRepository>();
@@ -72,6 +74,8 @@ builder.Services.AddScoped<IRecipeRepository, RecipeRepository>();
 builder.Services.AddScoped<IUserSavedRecipesRepository, UserSavedRecipesRepository>();
 builder.Services.AddScoped<IUserGradesRepository, UserGradesRepository>();
 builder.Services.AddScoped<ICommentRepository, CommentRepository>();
+builder.Services.AddScoped<IReportedRecipeRepository, ReportedRecipeRepository>();
+builder.Services.AddScoped<IReportedCommentRepository, ReportedCommentRepository>();
 
 
 //password
