@@ -85,8 +85,14 @@ public class AccountController : ControllerBase
     [HttpPost("login")]
     public async Task<IActionResult> Login([FromBody] LogInUserDto model)
     {
-        var token = await _userService.LoginUserAsync(model);
+        var (token, user) = await _userService.LoginUserAsync(model);
 
-        return Ok(token);
+        if (token == null || user == null)
+        {
+            return BadRequest("Invalid username or password.");
+        }
+
+        return Ok(new { User = user, Token = token });
     }
+
 }

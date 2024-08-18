@@ -84,19 +84,19 @@ namespace ChefsFeed_backend.Services.Implementation
             await _userRepository.AddUserAsync(user);
         }
 
-        public async Task<string> LoginUserAsync(LogInUserDto model)
+        public async Task<(string Token, UserDto User)> LoginUserAsync(LogInUserDto model)
         {
             var user = await _userRepository.GetUserByUsernameOrEmailAsync(model.Username);
             if (user == null || _passwordHasher.VerifyHashedPassword(user, user.Password, model.Password) != PasswordVerificationResult.Success)
             {
-                return null;
+                return (null, null);
             }
 
             var claims = new List<Claim>
-        {
-            new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
-            new Claim(ClaimTypes.Role, user.Role)
-        };
+    {
+        new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
+        new Claim(ClaimTypes.Role, user.Role)
+    };
 
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("VkVSfGYr8VSkxDRF8ftKCwZuqN1lLLxBZN7s20jS"));
             var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
@@ -110,8 +110,16 @@ namespace ChefsFeed_backend.Services.Implementation
             );
 
             var tokenString = new JwtSecurityTokenHandler().WriteToken(token);
-            return tokenString;
+
+            string img = user.ProfilePictureId != null
+                ? $"{_httpContextAccessor.HttpContext.Request.Scheme}://{_httpContextAccessor.HttpContext.Request.Host}/api/image/{user.ProfilePictureId}"
+                : "";
+
+            var userDto = new UserDto(user.Id, user.Username, user.FirstName, user.LastName, user.Email, img, user.Role);
+
+            return (tokenString, userDto);
         }
+
 
 
         public async Task<IEnumerable<UserDto>> SearchUsersAsync(string text)

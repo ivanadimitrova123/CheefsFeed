@@ -10,12 +10,18 @@ using ChefsFeed_backend.Services.Implementation;
 using ChefsFeed_backend.Services.Interfaces;
 using ChefsFeed_backend.Repositories.Implementation;
 using ChefsFeed_backend.Repositories.Interfaces;
-//using ChefsFeed_backend.Business.Interfaces;
-//using ChefsFeed_backend.Business.Services;
-//using ChefsFeed_backend.Data.Interfaces;
-//using ChefsFeed_backend.Data.Repositories;
 
 var builder = WebApplication.CreateBuilder(args);
+
+// Add CORS services
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowMyOrigin",
+        builder => builder
+            .WithOrigins("http://localhost:3000") 
+            .AllowAnyMethod()
+            .AllowAnyHeader());
+});
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
@@ -117,6 +123,8 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+
+app.UseCors("AllowMyOrigin");
 
 app.UseAuthorization();
 
