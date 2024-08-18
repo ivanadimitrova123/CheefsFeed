@@ -1,13 +1,17 @@
-import React, { useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
+import axios from "axios";
 import { Link, useNavigate } from "react-router-dom";
 import chefImg from "../assets/images/chef.png";
 import "../App.css";
 import Navbar from "../components/navbar";
-import axios from "../axios/axios";
+import DangerImg from "../assets/images/danger.png";
+import { Store } from "../Store";
 
 const Register = () => {
-  const navigate = useNavigate();
+  const { state } = useContext(Store);
+  const { userInfo } = state;
 
+  const navigate = useNavigate();
   const [user, setUser] = useState({
     Username: "",
     Password: "",
@@ -16,7 +20,7 @@ const Register = () => {
     LastName: "",
   });
 
-  const [loading, setLoading] = useState(false);
+  const [loading, setloading] = useState(false);
   const [errorModal, setErrorModal] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
 
@@ -27,12 +31,16 @@ const Register = () => {
   const handleRegister = async (e) => {
     e.preventDefault();
     try {
-      setLoading(true);
-      await axios.post("account/register", user);
-      setLoading(false);
-      navigate("/feed");
+      setloading(true);
+      const response = await axios.post(
+        "https://localhost:44365/api/account/register",
+        user
+      );
+      setloading(false);
+      navigate(`/login`);
+      console.log(response);
     } catch (error) {
-      setLoading(false);
+      setloading(false);
       console.error("Registration error", error);
 
       if (error.response && error.response.status === 400) {
@@ -56,6 +64,18 @@ const Register = () => {
         }
       }
     }
+  };
+
+  useEffect(() => {
+    console.log("userInfo in Register:", userInfo); // Debugging statement
+
+    if (userInfo) {
+      navigate("/feed");
+    }
+  }, [userInfo, navigate]);
+
+  const closeModal = () => {
+    setErrorModal(false);
   };
 
   return (
@@ -156,13 +176,14 @@ const Register = () => {
             )}
             <p className="mt-3 text-center">
               Already have an account{" "}
-              <Link to="/login" className="">
+              <Link to={"/login"} className="">
                 <b>Login</b>
               </Link>
             </p>
           </div>
         </div>
       </div>
+
       {errorModal && (
         <div
           className="modal"
@@ -174,15 +195,24 @@ const Register = () => {
             <div className="modal-content">
               <div className="modal-header">
                 <h5 className="modal-title">
-                  <b>Error</b>
+                  <b>Error</b> <img src={DangerImg} alt="" />
                 </h5>
                 <button
                   type="button"
                   className="close"
                   aria-label="Close"
-                  onClick={() => setErrorModal(false)}
+                  onClick={closeModal}
                 >
-                  <span aria-hidden="true">&times;</span>
+                  <span aria-hidden="true">
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      viewBox="0 0 50 50"
+                      width="100px"
+                      height="100px"
+                    >
+                      <path d="M 9.15625 6.3125 L 6.3125 9.15625 L 22.15625 25 L 6.21875 40.96875 L 9.03125 43.78125 L 25 27.84375 L 40.9375 43.78125 L 43.78125 40.9375 L 27.84375 25 L 43.6875 9.15625 L 40.84375 6.3125 L 25 22.15625 Z" />
+                    </svg>
+                  </span>
                 </button>
               </div>
               <div className="modal-body">
@@ -194,7 +224,7 @@ const Register = () => {
                 <button
                   type="button"
                   className="btn btn-secondary rounded-pill"
-                  onClick={() => setErrorModal(false)}
+                  onClick={closeModal}
                 >
                   OK
                 </button>
