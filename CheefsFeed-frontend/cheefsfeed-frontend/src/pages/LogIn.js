@@ -5,6 +5,7 @@ import Navbar from "../components/navbar";
 import DangerImg from "../assets/images/danger.png";
 import { Store } from "../Store";
 import "../App.css";
+import "bootstrap/dist/css/bootstrap.min.css";
 
 const Login = () => {
   const { state, dispatch: ctxDispatch } = useContext(Store);
