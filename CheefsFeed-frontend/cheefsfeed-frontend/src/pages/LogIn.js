@@ -1,9 +1,10 @@
 import React, { useContext, useEffect, useState } from "react";
-import axios from "axios";
+import axios from "../axios/axios";
 import { Link, useNavigate } from "react-router-dom";
 import Navbar from "../components/navbar";
 import DangerImg from "../assets/images/danger.png";
 import { Store } from "../Store";
+import "../App.css";
 
 const Login = () => {
   const { state, dispatch: ctxDispatch } = useContext(Store);
@@ -26,10 +27,7 @@ const Login = () => {
     e.preventDefault();
     try {
       setLoading(true);
-      const response = await axios.post(
-        "https://localhost:44365/api/account/login",
-        loginInfo
-      );
+      const response = await axios.post("account/login", loginInfo);
       if (response.status === 200) {
         ctxDispatch({ type: "USER_SIGNIN", payload: response.data });
         localStorage.setItem("userInfo", JSON.stringify(response.data));
@@ -37,11 +35,12 @@ const Login = () => {
       }
     } catch (error) {
       setLoading(false);
-      console.error("Login error", error);
 
       if (error.response && error.response.status === 400) {
         setErrorModal(true);
         setErrorMessage("Incorrect username or password. Please try again.");
+        console.error(errorMessage);
+
       }
     }
   };

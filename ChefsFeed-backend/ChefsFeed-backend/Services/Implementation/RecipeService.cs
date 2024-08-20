@@ -25,22 +25,25 @@ namespace ChefsFeed_backend.Services.Implementation
         public async Task<IEnumerable<RecipeDto>> GetPopularRecipesAsync()
         {
             var recipes = await _recipeRepository.GetPopularRecipesAsync();
+            var baseUrl = $"{_httpContextAccessor.HttpContext.Request.Scheme}://{_httpContextAccessor.HttpContext.Request.Host}/api/image/";
+
             return recipes.Select(recipe => new RecipeDto
             {
                 Id = recipe.Id,
                 Name = recipe.Name,
-                RecipeImage = $"http://example.com/api/image/{recipe.PictureId}"
+                RecipeImage = $"{baseUrl}{recipe.PictureId}"
             });
         }
 
         public async Task<IEnumerable<RecipeDto>> GetRecipesByUserIdAsync(long userId)
         {
             var recipes = await _recipeRepository.GetRecipesByUserIdAsync(userId);
+            var baseUrl = $"{_httpContextAccessor.HttpContext.Request.Scheme}://{_httpContextAccessor.HttpContext.Request.Host}/api/image/";
             return recipes.Select(recipe => new RecipeDto
             {
                 Id = recipe.Id,
                 Name = recipe.Name,
-                RecipeImage = $"http://example.com/api/image/{recipe.PictureId}"
+                RecipeImage = $"{baseUrl}{recipe.PictureId}"
             });
         }
 
@@ -74,11 +77,12 @@ namespace ChefsFeed_backend.Services.Implementation
         public async Task<IEnumerable<SearchRecipeDto>> SearchRecipesAsync(string text)
         {
             var recipes = await _recipeRepository.SearchRecipesAsync(text);
+            var baseUrl = $"{_httpContextAccessor.HttpContext.Request.Scheme}://{_httpContextAccessor.HttpContext.Request.Host}/api/image/";
             return recipes.Select(recipe => new SearchRecipeDto
             {
                 Id = recipe.Id,
                 Name = recipe.Name,
-                Picture = $"http://example.com/api/image/{recipe.PictureId}"
+                Picture = recipe.PictureId != null ? $"{baseUrl}{recipe.PictureId}" : string.Empty
             });
         }
 

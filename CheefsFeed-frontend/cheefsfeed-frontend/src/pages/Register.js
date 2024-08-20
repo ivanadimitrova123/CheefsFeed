@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from "react";
-import axios from "axios";
+import axios from "../axios/axios";
 import { Link, useNavigate } from "react-router-dom";
 import chefImg from "../assets/images/chef.png";
 import "../App.css";
@@ -32,10 +32,7 @@ const Register = () => {
     e.preventDefault();
     try {
       setloading(true);
-      const response = await axios.post(
-        "https://localhost:44365/api/account/register",
-        user
-      );
+      const response = await axios.post("account/register", user);
       setloading(false);
       navigate(`/login`);
       console.log(response);

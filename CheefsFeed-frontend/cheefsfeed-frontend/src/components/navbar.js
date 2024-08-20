@@ -1,10 +1,10 @@
 import React, { useState, useEffect, useContext } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import axios from "axios";
 import ChefsFeedImage from "../assets/images/ChefsFeed.png";
 import NavDropdown from "react-bootstrap/NavDropdown";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { Store } from "../Store";
+import axios from "../axios/axios";
 
 const Navbar = () => {
   const { state, dispatch: ctxDispatch } = useContext(Store);
@@ -22,10 +22,7 @@ const Navbar = () => {
       };
 
       axios
-        .get(
-          `https://localhost:44365/api/account/search?text=${searchText}`,
-          { headers }
-        )
+        .get(`account/search?text=${searchText}`, { headers })
         .then((response) => {
           setFoundUsers(response.data);
         })
@@ -34,10 +31,7 @@ const Navbar = () => {
         });
 
       axios
-        .get(
-          `https://localhost:44365/api/recipes/search?text=${searchText}`,
-          { headers }
-        )
+        .get(`recipes/search?text=${searchText}`, { headers })
         .then((response) => {
           setFoundRecipes(response.data);
         })

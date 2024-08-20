@@ -668,6 +668,11 @@ form.recipeDetailsForm {
   box-shadow: 0px 4px 20px 0px #00000014;
 }
 
+.comments-section {
+  background-image: url(../src/assets/images/Vector.png);
+  opacity: 0.5;
+}
+
 .infoDetails {
   display: flex;
   flex-direction: column;
@@ -770,6 +775,17 @@ form.recipeDetailsForm {
   position: relative;
 }
 
+.ingredients ul li::before {
+  content: "";
+  position: absolute;
+  left: -25px;
+  width: 20px;
+  height: 20px;
+  background-image: url(/src/assets/images/checkmark.png);
+  top: 5px;
+  bottom: 0px;
+  background-size: contain;
+}
 
 .directions {
   /* width: 50%; */
@@ -858,6 +874,16 @@ form.recipeDetailsForm {
   background: #d53856;
   border-radius: 15px;
   padding: 5px 20px 5px 20px;
+}
+
+.loginPageBg {
+  background-image: url(/src/assets/images/wave.svg);
+  height: 100%;
+  width: 100%;
+  bottom: 0px;
+  background-position: bottom;
+  background-size: 2000px;
+  background-repeat: no-repeat;
 }
 
 .heightMore {
