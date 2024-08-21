@@ -10,6 +10,7 @@ import LogIn from "./pages/LogIn";
 import Feed from './pages/Feed';
 import ForgotPassword from "./pages/ForgotPassword";
 import AddProfilePicture from "./pages/AddProfilePicture";
+import FollowingList from "./pages/FollowingList";
 
 
 function App() {
@@ -22,6 +23,7 @@ function App() {
         <Route path="/forgotPassword" element={<ForgotPassword />} />
         <Route path="/feed" element={<Feed/>} />
         <Route path="/addProfilePicture" element={<AddProfilePicture />} />
+        <Route path="/followingList" element={<FollowingList />} />
 
       </Routes>
     </Router>
