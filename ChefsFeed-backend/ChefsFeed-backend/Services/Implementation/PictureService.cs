@@ -8,11 +8,13 @@ namespace ChefsFeed_backend.Services.Implementation
     {
         private readonly IPictureRepository _pictureRepository;
         private readonly IUserRepository _userRepository;
+        private readonly IHttpContextAccessor _httpContextAccessor;
 
-        public PictureService(IPictureRepository pictureRepository, IUserRepository userRepository)
+        public PictureService(IPictureRepository pictureRepository, IUserRepository userRepository, IHttpContextAccessor httpContextAccessor)
         {
             _pictureRepository = pictureRepository;
             _userRepository = userRepository;
+            _httpContextAccessor = httpContextAccessor;
         }
 
         public async Task<string> UploadImageAsync(IFormFile file, long userId)
@@ -45,8 +47,10 @@ namespace ChefsFeed_backend.Services.Implementation
                 user.ProfilePictureId = image.Id;
                 await _userRepository.SaveChangesAsync();
 
-                // Construct the image URL
-                string imageUrl = $"https://yourdomain.com/api/image/{image.Id}";
+                var request = _httpContextAccessor.HttpContext.Request;
+                string baseUrl = $"{request.Scheme}://{request.Host}";
+                string imageUrl = $"{baseUrl}/api/image/{image.Id}";
+
                 return imageUrl;
             }
         }

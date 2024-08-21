@@ -8,6 +8,9 @@ import "./App.css";
 import Register from "./pages/Register";
 import LogIn from "./pages/LogIn";
 import Feed from './pages/Feed';
+import ForgotPassword from "./pages/ForgotPassword";
+import AddProfilePicture from "./pages/AddProfilePicture";
+
 
 function App() {
   return (
@@ -16,7 +19,9 @@ function App() {
       <Routes>
         <Route path="/register" element={<Register/>} />
         <Route path="/login" element={<LogIn/>} />
+        <Route path="/forgotPassword" element={<ForgotPassword />} />
         <Route path="/feed" element={<Feed/>} />
+        <Route path="/addProfilePicture" element={<AddProfilePicture />} />
 
       </Routes>
     </Router>

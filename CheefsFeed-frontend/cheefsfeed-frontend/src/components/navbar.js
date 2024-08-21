@@ -16,6 +16,7 @@ const Navbar = () => {
   const [foundRecipes, setFoundRecipes] = useState([]);
 
   useEffect(() => {
+    console.log('Updated userInfo:', userInfo);
     if (searchText.length > 0) {
       const headers = {
         Authorization: `Bearer ${userInfo.token}`,
