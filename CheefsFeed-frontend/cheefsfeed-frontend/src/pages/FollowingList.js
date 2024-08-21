@@ -15,10 +15,10 @@ function FollowingList() {
     const fetchFollowingUsers = async () => {
       try {
         const response = await axios.get("follow/following", {
-            headers: {
-              Authorization: `Bearer ${userInfo.token}`,
-            },
-          });
+          headers: {
+            Authorization: `Bearer ${userInfo.token}`,
+          },
+        });
         setFollowingUsers(response.data);
         setLoading(false);
       } catch (error) {
@@ -33,14 +33,13 @@ function FollowingList() {
 
   const handleUnfollow = async (followedUserId) => {
     try {
-        await axios.delete(`follow/${followedUserId}`, {
-            headers: {
-              Authorization: `Bearer ${userInfo.token}`,
-            },
-        });
+      await axios.delete(`follow/${followedUserId}`, {
+        headers: {
+          Authorization: `Bearer ${userInfo.token}`,
+        },
+      });
       setRefresh(true);
     } catch (error) {
-     // setUnfollowLoading(false);
       console.error("Error unfollowing user:", error);
     }
   };
@@ -49,44 +48,42 @@ function FollowingList() {
     <div>
       <Navbar />
       <div className="container mt-5">
-      <h2>Your Following List</h2>
-      {loading ? (
-        <p>Loading...</p>
-      ) : followingUsers.length > 0 ? (
-        <ul
-          className="followingList mt-3"
-          style={{
-            display: "flex",
-            flexDirection: "column",
-            justifyContent: "center",
-          }}
-        >
-          {followingUsers.map((user) => (
-            <li key={user.id} className="mt-3">
-              <img
-                src={
-                    !user.picture ||
-                    user.picture === `${baseUrl}/default.jpg`
-                      ? `${baseUrl}/default.jpg`
-                      : user.picture
-                  }
-                alt={user.username}
-                style={{ width: "50px", height: "50px" }}
-              />
-              <h3>{user.username}</h3>
-
-              <button
-                className="btn btn-danger"
-                onClick={() => handleUnfollow(user.id)}
+        <h2>Your Following List</h2>
+        {loading ? (
+          <p>Loading...</p>
+        ) : followingUsers.length > 0 ? (
+          <ul className="followingList mt-5">
+            {followingUsers.map((user) => (
+              <li
+                key={user.id}
+                className="d-flex align-items-center justify-content-between mt-3"
+                style={{ borderBottom: "1px solid #e0e0e0", paddingBottom: "10px" }}
               >
-                Unfollow
-              </button>
-            </li>
-          ))}
-        </ul>
-      ) : (
-        <p className="mt-3 fs-5">You are not following any users.</p>
-      )}
+                <div className="d-flex align-items-center">
+                  <img
+                    src={
+                      !user.picture ||
+                      user.picture === `${baseUrl}/default.jpg`
+                        ? `${baseUrl}/default.jpg`
+                        : user.picture
+                    }
+                    alt={user.username}
+                    style={{ width: "50px", height: "50px", marginRight: "15px" }}
+                  />
+                  <h3 className="mb-0">{user.username}</h3>
+                </div>
+                <button
+                  className="btn btn-danger"
+                  onClick={() => handleUnfollow(user.id)}
+                >
+                  Unfollow
+                </button>
+              </li>
+            ))}
+          </ul>
+        ) : (
+          <p className="mt-3 fs-5">You are not following any users.</p>
+        )}
       </div>
     </div>
   );

@@ -25,6 +25,7 @@ public class FollowRepository : IFollowRepository
     {
         return _context.Users
             .Include(u => u.Following)
+            .ThenInclude(f => f.Recipes)
             .FirstOrDefault(u => u.Id == userId);
     }
 

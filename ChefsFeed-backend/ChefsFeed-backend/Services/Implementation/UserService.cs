@@ -80,9 +80,22 @@ namespace ChefsFeed_backend.Services.Implementation
 
         public async Task RegisterUserAsync(User user)
         {
+            var existingUserByEmail = await _userRepository.GetUserByEmailAsync(user.Email);
+            if (existingUserByEmail != null)
+            {
+                throw new ArgumentException("A user with this email already exists.");
+            }
+
+            var existingUserByUsername = await _userRepository.GetUserByUsernameAsync(user.Username);
+            if (existingUserByUsername != null)
+            {
+                throw new ArgumentException("A user with this username already exists.");
+            }
+
             user.Password = _passwordHasher.HashPassword(user, user.Password);
             await _userRepository.AddUserAsync(user);
         }
+
 
         public async Task<(string Token, UserDto User)> LoginUserAsync(LogInUserDto model)
         {

@@ -42,23 +42,25 @@ const Register = () => {
 
       if (error.response && error.response.status === 400) {
         const { data } = error.response;
-        if (data && (data.Email || data.Username)) {
-          setErrorModal(true);
+        let errorMessage = "";
 
-          let errorMessage = "";
-
-          if (data.Email) {
-            errorMessage += data.Email[0];
+        if (data && data.Registration && data.Registration.length > 0) {
+          const registrationErrors = data.Registration;
+  
+          if (registrationErrors.some(message => message.includes("username"))) {
+              errorMessage = "A user with this username already exists.";
+          } else if (registrationErrors.some(message => message.includes("email"))) {
+              errorMessage = "A user with this email already exists.";
+          } else {
+              errorMessage = registrationErrors.join(" "); 
           }
-
-          if (data.Username) {
-            errorMessage += (errorMessage ? " " : "") + data.Username[0];
-          }
-
-          setErrorMessage(errorMessage);
-        } else {
-          setErrorMessage("Registration failed. Please try again.");
-        }
+      } else {
+          errorMessage = "Registration failed. Please try again.";
+      }
+  
+      // Show the error modal and set the error message
+      setErrorModal(true);
+      setErrorMessage(errorMessage);
       }
     }
   };
@@ -182,12 +184,7 @@ const Register = () => {
       </div>
 
       {errorModal && (
-        <div
-          className="modal"
-          tabIndex="-1"
-          role="dialog"
-          style={{ display: "block" }}
-        >
+        <div className="modal" tabIndex="-1" role="dialog">
           <div className="modal-dialog" role="document">
             <div className="modal-content">
               <div className="modal-header">
@@ -197,6 +194,7 @@ const Register = () => {
                 <button
                   type="button"
                   className="close"
+                  data-dismiss="modal"
                   aria-label="Close"
                   onClick={closeModal}
                 >

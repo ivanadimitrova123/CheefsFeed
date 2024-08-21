@@ -54,5 +54,16 @@ namespace ChefsFeed_backend.Repositories.Implementation
         {
             await _context.SaveChangesAsync();
         }
+
+        public async Task<User> GetUserByEmailAsync(string email)
+        {
+            return await _context.Users.FirstOrDefaultAsync(u => u.Email == email);
+        }
+
+        public async Task<User> GetUserByUsernameAsync(string username)
+        {
+            return await _context.Users.FirstOrDefaultAsync(u => u.Username == username);
+        }
+
     }
 }

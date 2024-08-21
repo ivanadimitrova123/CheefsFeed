@@ -9,8 +9,9 @@ namespace ChefsFeed_backend.Repositories.Interfaces
         Task<User> GetUserByUsernameOrEmailAsync(string usernameOrEmail);
         Task AddUserAsync(User user);
         Task SaveChangesAsync();
-        
         Task<IEnumerable<User>> SearchUsersAsync(string text);
-                
+        Task<User> GetUserByEmailAsync(string email);
+        Task<User> GetUserByUsernameAsync(string username);
+
     }
 }
