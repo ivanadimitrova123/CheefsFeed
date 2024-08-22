@@ -10,51 +10,40 @@ using ChefsFeed_backend.Services.Interfaces;
 public class CommentService : ICommentService
 {
     private readonly ICommentRepository _commentRepository;
-
-    public CommentService(ICommentRepository commentRepository)
+    private readonly IHttpContextAccessor _httpContextAccessor;
+    public CommentService(ICommentRepository commentRepository, IHttpContextAccessor httpContextAccessor)
     {
         _commentRepository = commentRepository;
+        _httpContextAccessor = httpContextAccessor;
+
     }
 
-    public async Task<IEnumerable<Comment>> GetCommentsForRecipeAsync(long recipeId)
+    public async Task<IEnumerable<object>> GetCommentsForRecipeAsync(long recipeId)
     {
         var comments = await _commentRepository.GetCommentsForRecipeAsync(recipeId);
+
         if (comments == null)
         {
-            return Enumerable.Empty<Comment>();
+            return Enumerable.Empty<object>();
         }
-        return comments.Select(c => new Comment
+
+        var editedComments = comments.Select(comment => new
         {
-        CommentId = c.CommentId,
-        ParentId = c.ParentId,
-        UserId = c.User?.Id ?? 0, // Use null conditional operator and default value if User is null
-        User = c.User != null ? new User
-        {
-            Id = c.User.Id,
-            Username = c.User.Username,
-            ProfilePictureId = c.User.ProfilePictureId
-        } : null,
-        RecipeId = c.Recipe?.Id ?? 0, // Use null conditional operator and default value if Recipe is null
-        Recipe = c.Recipe != null ? new Recipe
-        {
-            Id = c.Recipe.Id,
-            Name = c.Recipe.Name,
-            PictureId = c.Recipe.PictureId
-        } : null,
-        Content = c.Content,
-        Parent = c.Parent != null ? new Comment
-        {
-            CommentId = c.Parent.CommentId,
-            Content = c.Parent.Content
-            // You might want to include more fields from the parent if needed
-        } : null,
-        Children = c.Children != null ? c.Children.Select(child => new Comment
-        {
-            CommentId = child.CommentId,
-            Content = child.Content
-            // You might want to include more fields from the child if needed
-        }).ToList() : new List<Comment>()
-    });
+            comment.CommentId,
+            comment.ParentId,
+            Username = comment.User?.Username,
+            UserImage = comment.User?.ProfilePictureId != null
+                ? $"{_httpContextAccessor.HttpContext.Request.Scheme}://{_httpContextAccessor.HttpContext.Request.Host}/api/image/{comment.User.ProfilePictureId}"
+                : null,
+            comment.Content,
+            Children = comment.Children.Select(child => new
+            {
+                child.CommentId,
+                child.Content
+            })
+        }).ToList();
+
+        return editedComments;
     }
 
     public async Task CreateCommentAsync(Comment comment)

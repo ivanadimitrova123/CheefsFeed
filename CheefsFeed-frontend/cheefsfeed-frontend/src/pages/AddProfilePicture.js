@@ -2,6 +2,7 @@ import React, { useContext, useState } from "react";
 import Navbar from "../components/navbar";
 import { Store } from "../Store";
 import { useNavigate } from "react-router-dom";
+import axios from "../axios/axios";
 
 function ImageUpload() {
   const navigate = useNavigate();
@@ -12,45 +13,37 @@ function ImageUpload() {
   const handleFileChange = (e) => {
     setSelectedFile(e.target.files[0]);
   };
-
+  
   const handleUpload = async () => {
     if (!selectedFile) {
       alert("Please select a file to upload.");
       return;
     }
-
+  
     const formData = new FormData();
     formData.append("file", selectedFile);
-
-    const headers = new Headers();
-    headers.append("Authorization", `Bearer ${userInfo.token}`);
-
+  
+    const headers = {
+      "Authorization": `Bearer ${userInfo.token}`
+    };
+  
     try {
-      const response = await fetch(
-        "https://localhost:44365/api/image",
-        {
-          method: "POST",
-          body: formData,
-          headers,
-        }
-      );
-
-      if (response.ok) {
-        const data = await response.json();
-        var u = userInfo.user;
-        u.picture = data.imageUrl;
-        ctxDispatch({ type: "UPDATE_PICTURE", payload: u });
+      const response = await axios.post("image", formData, { headers });
+  
+      if (response.status === 200) {
+        const data = response.data;
+        const updatedUser = { ...userInfo.user, picture: data.imageUrl };
+        ctxDispatch({ type: "UPDATE_PICTURE", payload: updatedUser });
         navigate(`/userProfile/${userInfo.user.id}`);
       } else {
-        const data = await response.json();
-        alert(`Upload failed: ${data}`);
-        console.log(data);
+        alert(`Upload failed: ${response.statusText}`);
       }
     } catch (error) {
+      console.error("Upload error:", error.response ? error.response.data : error.message);
       alert("An error occurred while uploading the image.");
-      console.error(error);
     }
   };
+  
 
   const handleConfirm = () => {
     handleUpload();

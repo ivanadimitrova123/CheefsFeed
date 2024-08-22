@@ -31,6 +31,7 @@ public class CommentRepository : ICommentRepository
             .Where(c => c.RecipeId == recipeId)
             .Include(c => c.Children)
             .Include(c => c.User)
+            .Include(c => c.Recipe)
             .ToListAsync();
     }
 

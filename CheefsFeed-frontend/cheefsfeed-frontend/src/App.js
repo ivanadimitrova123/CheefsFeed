@@ -13,7 +13,7 @@ import AddProfilePicture from "./pages/AddProfilePicture";
 import FollowingList from "./pages/FollowingList";
 import UserProfile from "./pages/UserProfile";
 import SavedRecipes from './pages/SavedRecipes';
-
+import RecipeDetails from './pages/RecipeDetails';
 function App() {
   return (
     <Router>
@@ -27,6 +27,7 @@ function App() {
         <Route path="/followingList" element={<FollowingList />} />
         <Route path="/userProfile/:id" element={<UserProfile />} />
         <Route path='/savedRecipes' element={<SavedRecipes/>}/>
+        <Route path='/recipeDetails/:id' element={<RecipeDetails/>}/>
       </Routes>
     </Router>
   );

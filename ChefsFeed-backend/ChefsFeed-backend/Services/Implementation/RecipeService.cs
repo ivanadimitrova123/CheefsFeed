@@ -22,18 +22,29 @@ namespace ChefsFeed_backend.Services.Implementation
             _httpContextAccessor = httpContextAccessor;
         }
 
-        public async Task<IEnumerable<RecipeDto>> GetPopularRecipesAsync()
+        public async Task<IEnumerable<object>> GetPopularRecipesAsync()
         {
             var recipes = await _recipeRepository.GetPopularRecipesAsync();
-            var baseUrl = $"{_httpContextAccessor.HttpContext.Request.Scheme}://{_httpContextAccessor.HttpContext.Request.Host}/api/image/";
+            var editedRecipes = new List<object>();
 
-            return recipes.Select(recipe => new RecipeDto
+            foreach (var recipe in recipes)
             {
-                Id = recipe.Id,
-                Name = recipe.Name,
-                RecipeImage = $"{baseUrl}{recipe.PictureId}"
-            });
+                string imgUrl = $"{_httpContextAccessor.HttpContext.Request.Scheme}://{_httpContextAccessor.HttpContext.Request.Host}/api/image/{recipe.PictureId}";
+
+                editedRecipes.Add(new
+                {
+                    recipe.Id,
+                    recipe.Name,
+                    img = imgUrl,
+                    recipe.Total,
+                    recipe.Level,
+                    Username = recipe.User?.Username
+                });
+            }
+
+            return editedRecipes;
         }
+
 
         public async Task<IEnumerable<RecipeDto>> GetRecipesByUserIdAsync(long userId)
         {
