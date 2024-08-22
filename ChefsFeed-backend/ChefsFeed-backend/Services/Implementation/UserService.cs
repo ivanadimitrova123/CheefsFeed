@@ -16,13 +16,14 @@ namespace ChefsFeed_backend.Services.Implementation
         private readonly IUserRepository _userRepository;
         private readonly IPasswordHasher<User> _passwordHasher;
         private readonly IHttpContextAccessor _httpContextAccessor;
+        private readonly ICommentRepository _commentRepository;
 
-        public UserService(IUserRepository userRepository, IPasswordHasher<User> passwordHasher, IHttpContextAccessor httpContextAccessor)
+        public UserService(IUserRepository userRepository, IPasswordHasher<User> passwordHasher, IHttpContextAccessor httpContextAccessor, ICommentRepository commentRepository)
         {
             _userRepository = userRepository;
             _passwordHasher = passwordHasher;
             _httpContextAccessor = httpContextAccessor;
-
+            _commentRepository = commentRepository;
         }
 
         public async Task<IEnumerable<User>> GetAllUsersAsync()
@@ -30,29 +31,55 @@ namespace ChefsFeed_backend.Services.Implementation
             return await _userRepository.GetAllUsersAsync();
         }
 
-        public async Task<User> GetUserProfileAsync(long userId)
+        public async Task<object> GetUserProfileAsync(long userId)
         {
-            var user = await _userRepository.GetUserByIdAsync(userId);
+            var userProfile = await _userRepository.GetUserByIdAsync(userId);
 
-            if (user == null)
+            if (userProfile == null)
             {
                 return null;
             }
 
-            return new User
+            string userImage = null;
+            if (userProfile.ProfilePictureId != null)
             {
-                Id = user.Id,
-                Username = user.Username,
-                FirstName = user.FirstName,
-                LastName = user.LastName,
-                Email = user.Email,
-                ProfilePicture = user.ProfilePicture,
-                Role = user.Role,
-                Recipes = user.Recipes,
-                Following = user.Following,
-                Followers = user.Followers
+                userImage = $"{_httpContextAccessor.HttpContext.Request.Scheme}://{_httpContextAccessor.HttpContext.Request.Host}/api/image/{userProfile.ProfilePictureId}";
+            }
+
+            var recipeData = new List<object>();
+
+            foreach (var recipe in userProfile.Recipes)
+            {
+                var commentsCount = await _commentRepository.GetCommentsForRecipeAsync(recipe.Id);
+
+                recipeData.Add(new
+                {
+                    recipe.Id,
+                    recipe.Name,
+                    recipe.PictureId,
+                    RecipeImage = $"{_httpContextAccessor.HttpContext.Request.Scheme}://{_httpContextAccessor.HttpContext.Request.Host}/api/image/{recipe.PictureId}",
+                    Comments = commentsCount.Count(),
+                    recipe.Rating
+                });
+            }
+
+            var userData = new
+            {
+                Id = userProfile.Id,
+                Username = userProfile.Username,
+                FirstName = userProfile.FirstName,
+                LastName = userProfile.LastName,
+                ImageId = userProfile.ProfilePictureId,
+                UserImage = userImage,
+                Recipes = recipeData,
+                Following = userProfile.Following.Count,
+                Followers = userProfile.Followers.Count
             };
+
+            return userData;
         }
+
+
 
         public async Task<User> GetCurrentUserInfoAsync(long userId)
         {

@@ -11,7 +11,8 @@ import Feed from './pages/Feed';
 import ForgotPassword from "./pages/ForgotPassword";
 import AddProfilePicture from "./pages/AddProfilePicture";
 import FollowingList from "./pages/FollowingList";
-
+import UserProfile from "./pages/UserProfile";
+import SavedRecipes from './pages/SavedRecipes';
 
 function App() {
   return (
@@ -24,7 +25,8 @@ function App() {
         <Route path="/feed" element={<Feed/>} />
         <Route path="/addProfilePicture" element={<AddProfilePicture />} />
         <Route path="/followingList" element={<FollowingList />} />
-
+        <Route path="/userProfile/:id" element={<UserProfile />} />
+        <Route path='/savedRecipes' element={<SavedRecipes/>}/>
       </Routes>
     </Router>
   );
