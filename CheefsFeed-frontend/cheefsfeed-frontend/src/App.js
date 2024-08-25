@@ -14,6 +14,8 @@ import FollowingList from "./pages/FollowingList";
 import UserProfile from "./pages/UserProfile";
 import SavedRecipes from './pages/SavedRecipes';
 import RecipeDetails from './pages/RecipeDetails';
+import RecipeForm from "./pages/RecipeForm";
+
 function App() {
   return (
     <Router>
@@ -28,6 +30,9 @@ function App() {
         <Route path="/userProfile/:id" element={<UserProfile />} />
         <Route path='/savedRecipes' element={<SavedRecipes/>}/>
         <Route path='/recipeDetails/:id' element={<RecipeDetails/>}/>
+        <Route path="/recipeForm" element={<RecipeForm />} />
+        <Route path="/recipeForm/:id" element={<RecipeForm />} />
+
       </Routes>
     </Router>
   );

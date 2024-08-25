@@ -16,7 +16,6 @@ const Navbar = () => {
   const [foundRecipes, setFoundRecipes] = useState([]);
 
   useEffect(() => {
-    console.log('Updated userInfo:', userInfo);
     if (searchText.length > 0) {
       const headers = {
         Authorization: `Bearer ${userInfo.token}`,
@@ -78,7 +77,7 @@ const Navbar = () => {
                     placeholder="Search..."
                   />
                   {searchText.length > 0 && (
-                    <div className="dropdown-menu show searchItemsList">
+                    <div className="dropdown-menu show searchItemsList ps-1">
                       {/* Render found users */}
                       {foundUsers.length > 0 && "Users"}
                       {foundUsers.map((user) => (

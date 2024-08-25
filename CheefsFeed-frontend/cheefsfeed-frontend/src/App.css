@@ -500,20 +500,19 @@ ul.navbar-nav {
 
 .recipeHeader {
   width: 100%;
-  background: #b57878;
+  background: #ffbaba92;
   height: 40vh;
   text-align: center;
-}
-
-.recipeHeader .recipePhotoCover input {
-  margin-top: 100px;
 }
 
 input.recipeTitle {
   width: 40%;
   margin: 0 auto;
-  background: #d9d9d9 !important;
+  background: #ece6e695 !important;
   height: 45px;
+  border: 1px solid #ccc; 
+  border-radius: 5px; 
+  padding: 0 10px;
 }
 
 input.recipeTitle:focus {

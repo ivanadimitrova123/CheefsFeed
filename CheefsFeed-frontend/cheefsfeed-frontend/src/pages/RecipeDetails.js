@@ -60,7 +60,7 @@ const RecipeDetails = () => {
     };
 
     setCurrentDate(getCurrentDate());
-  }, [userInfo, id, baseUrl]);
+  }, [userInfo, id, baseUrl, recipe]);
 
   useEffect(() => {
     const headers = {
@@ -169,6 +169,8 @@ const RecipeDetails = () => {
       });
   };
 
+  //TODO: CRETAE utils.js file, in which you can add small helper functions from all of the components
+  // You can create getHeaders function with token and shouldHaveContentType properties
   const saveRecipe = () => {
     const headers = {
       "Content-Type": "multipart/form-data",
@@ -271,6 +273,7 @@ const RecipeDetails = () => {
             <div className="info-details mt-4">
               <h1 className="recipe-name">{recipe.name}</h1>
               <div className="recipeBoxDetails">
+                {/* TODO: CREATE one component for minDetails, and call it with a map function(orginize the information with list of objects with 3 properties) */}
                 <div className="detailsMins">
                   <div className="createdBy">
                     <img
@@ -353,28 +356,25 @@ const RecipeDetails = () => {
                     </div>
                   </div>
                 </div>
-
                 <div className="actionShareBtn">
                   <Button className="button-fav" onClick={saveRecipe}>
-                    {" "}
-                    <img src={Favorites} alt="bookmark" />{" "}
+                    <img src={Favorites} alt="bookmark" />
                     {saveIsLoading ? (
                       <Spinner style={{ width: "1rem", height: "1rem" }} />
                     ) : (
-                      "Save recipe"
+                      <span>Save recipe</span>
                     )}
                   </Button>
-                  <Button className="button-fav" onClick={reportRecipe}>
-                    {" "}
+                  <Button className="button-fav " onClick={reportRecipe}>
                     <img
                       src={flag}
                       alt="bookmark"
                       style={{ height: "1.5rem" }}
-                    />{" "}
+                    />
                     {reportIsLoading ? (
                       <Spinner style={{ width: "1rem", height: "1rem" }} />
                     ) : (
-                      "Report recipe"
+                      <span className="ms-2">Report recipe</span>
                     )}
                   </Button>
                 </div>
@@ -411,6 +411,7 @@ const RecipeDetails = () => {
               <PopularRecipes recipes={popularRecipes.slice(0, 3)} />
             </div>
             {/* Recipe description and ingredients */}
+            {/* TODO: You do not need the second dif, just add the css in the first dif */}
             <div className="description-for-recipe mt-4">
               <div className="flex-items" style={{ display: "flex" }}>
                 <div className="directions">
@@ -461,6 +462,7 @@ const RecipeDetails = () => {
                 </button>
               </div>
             )}
+            {/* TODO: comments part can be a separate component*/}
             {/* Comment section */}
             {userInfo.user.id !== recipe.user.id && (
               <>

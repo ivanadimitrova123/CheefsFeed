@@ -68,10 +68,9 @@ namespace ChefsFeed_backend.Services.Implementation
             foreach (var savedRecipe in savedRecipes)
             {
                 var recipe = await _repository.GetRecipeByIdAsync(savedRecipe.RecipeId);
-                if (recipe != null)
+                if (recipe != null && recipe.User != null)
                 {
-                    var userImage = "https://localhost:44365/api/image/1";
-                        //$"{httpContext.Request.Scheme}://{httpContext.Request.Host}/api/image/{recipe.User.ProfilePictureId}";
+                    var userImage = $"{httpContext.Request.Scheme}://{httpContext.Request.Host}/api/image/{recipe.User.ProfilePictureId}";
                     var commentsCount = await _repository.GetCommentsCountForRecipeAsync(recipe.Id);
                     recipesList.Add(new
                     {
