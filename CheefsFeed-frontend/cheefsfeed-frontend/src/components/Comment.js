@@ -3,17 +3,14 @@ import flag from "../assets/images/flag-black-shape.svg";
 import { Store } from "../Store";
 import axios from "../axios/axios"; 
 import { toast } from "react-toastify";
-
+import { getHeaders } from "../utils";
 const Comment = ({ comment, deleteHandler }) => {
   const { state } = useContext(Store);
   const { userInfo } = state;
   //const [reportIsLoading, setReportIsLoading] = useState(false);
 
   const reportHandler = async () => {
-    const headers = {
-      "Content-Type": "multipart/form-data",
-      Authorization: `Bearer ${userInfo.token}`, 
-    };
+    const headers = getHeaders(userInfo.token);
 
     //setReportIsLoading(true);
 
@@ -65,7 +62,11 @@ const Comment = ({ comment, deleteHandler }) => {
         />
       ) : (
         <button
-          className="btn btn-danger"
+          className="btn" style={{  background: "#ff1540", 
+          color: "white",
+          borderRadius: "15px",
+          padding: "5px 20px"
+          }}
           onClick={() => deleteHandler(comment.commentId)}
         >
           Delete

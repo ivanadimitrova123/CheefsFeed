@@ -13,6 +13,7 @@ import PopularRecipes from "../components/PopularRecipes";
 import RecomendedRecipes from "../components/RecomendedRecipes";
 import Comment from "../components/Comment";
 import { toast } from "react-toastify";
+import { getHeaders } from "../utils";
 
 const RecipeDetails = () => {
   const { state } = useContext(Store);
@@ -37,9 +38,7 @@ const RecipeDetails = () => {
   const baseUrl = window.location.origin;
 
   useEffect(() => {
-    const headers = {
-      Authorization: `Bearer ${userInfo.token}`,
-    };
+    const headers = getHeaders(userInfo.token, false);
 
     axios
       .get(`recipes/${id}`, { headers })
@@ -60,13 +59,12 @@ const RecipeDetails = () => {
     };
 
     setCurrentDate(getCurrentDate());
-  }, [userInfo, id, baseUrl, recipe]);
+  }, [userInfo, id, baseUrl]);
 
   useEffect(() => {
-    const headers = {
-      Authorization: `Bearer ${userInfo.token}`,
-    };
+    const headers = getHeaders(userInfo.token, false);
 
+    console.log("pop");
     axios
       .get(`recipes/popular`, { headers })
       .then((response) => {
@@ -87,9 +85,7 @@ const RecipeDetails = () => {
 
   useEffect(() => {
     if (recipe && userInfo.user.id !== recipe.user.id) {
-      const headers = {
-        Authorization: `Bearer ${userInfo.token}`,
-      };
+      const headers = getHeaders(userInfo.token, false);
       axios
         .get(`usergrades?userId=${userInfo.user.id}&recipeId=${recipe.id}`, { headers })
         .then((response) => {
@@ -103,10 +99,10 @@ const RecipeDetails = () => {
   }, [userInfo, recipe]);
 
   useEffect(() => {
-    const headers = {
-      Authorization: `Bearer ${userInfo.token}`,
-    };
+    const headers = getHeaders(userInfo.token,false);
+
     if (recipe && recipe.id != null) {
+        console.log("coments");
       axios
         .get(`comments/${recipe.id}`, { headers })
         .then((response) => setComments(response.data))
@@ -122,12 +118,8 @@ const RecipeDetails = () => {
   };
 
   const handleDelete = () => {
-    const headers = {
-      Authorization: `Bearer ${userInfo.token}`,
-    };
-
+    const headers = getHeaders(userInfo.token, false);
     setDeleteIsLoading(true);
-
     axios
       .delete(`recipes/${id}`, { headers })
       .then(() => {
@@ -145,18 +137,14 @@ const RecipeDetails = () => {
   };
 
   const gradeRecipe = (grade) => {
-    const headers = {
-      "Content-Type": "multipart/form-data",
-      Authorization: `Bearer ${userInfo.token}`,
-    };
-
+    const headers = getHeaders(userInfo.token);
     //setGradeIsLoading(true);
 
     const formData = new FormData();
     formData.append("userId", userInfo.user.id);
     formData.append("recipeId", recipe.id);
     formData.append("grade", grade);
-
+    console.log("grade post");
     axios
       .post(`usergrades`, formData, { headers })
       .then(() => {
@@ -169,16 +157,9 @@ const RecipeDetails = () => {
       });
   };
 
-  //TODO: CRETAE utils.js file, in which you can add small helper functions from all of the components
-  // You can create getHeaders function with token and shouldHaveContentType properties
   const saveRecipe = () => {
-    const headers = {
-      "Content-Type": "multipart/form-data",
-      Authorization: `Bearer ${userInfo.token}`,
-    };
-
+    const headers = getHeaders(userInfo.token);
     setSaveIsLoading(true);
-
     const formData = new FormData();
     formData.append("userId", userInfo.user.id);
     formData.append("recipeId", recipe.id);
@@ -198,11 +179,7 @@ const RecipeDetails = () => {
   const addCommentHandler = (e) => {
     e.preventDefault();
     setAddCommentLoading(true);
-    const headers = {
-      "Content-Type": "multipart/form-data",
-      Authorization: `Bearer ${userInfo.token}`,
-    };
-
+    const headers = getHeaders(userInfo.token);
     const formData = new FormData();
     formData.append("UserId", userInfo.user.id);
     formData.append("RecipeId", recipe.id);
@@ -223,12 +200,7 @@ const RecipeDetails = () => {
 
   const deleteCommentHandler = async (id) => {
     //setDeleteCommentLoading(true);
-
-    const headers = {
-      "Content-Type": "multipart/form-data",
-      Authorization: `Bearer ${userInfo.token}`,
-    };
-
+    const headers = getHeaders(userInfo.token);
     axios
       .delete(`comments/${id}`, { headers })
       .then(() => {
@@ -243,11 +215,7 @@ const RecipeDetails = () => {
 
   const reportRecipe = async () => {
     setReportIsLoading(true);
-    const headers = {
-      "Content-Type": "multipart/form-data",
-      Authorization: `Bearer ${userInfo.user.id}`,
-    };
-
+    const headers = getHeaders(userInfo.token);
     const formData = new FormData();
     formData.append("userId", userInfo.user.id);
     formData.append("recipeId", recipe.id);
@@ -280,9 +248,7 @@ const RecipeDetails = () => {
                       src={
                         recipeUserImage === null ||
                         recipeUserImage === undefined ||
-                        recipeUserImage === "" ||
-                        recipeUserImage ===
-                          "http://recipes-backend-id80.onrender.com/api/image/"
+                        recipeUserImage === "" 
                           ? `${baseUrl}/default.jpg`
                           : recipeUserImage
                       }
@@ -356,46 +322,67 @@ const RecipeDetails = () => {
                     </div>
                   </div>
                 </div>
-                <div className="actionShareBtn">
-                  <Button className="button-fav" onClick={saveRecipe}>
+              </div>
+            </div>
+            <div className="recipe-actions d-flex align-items-center  mt-4">
+                {/* Recipe rating */}
+                <div className="numbered-timing me-5">
+                    <div className="second-time newRating">
+                    <p className="fs-5">
+                        Rating: <span>{parseFloat(recipe.rating).toFixed(2)}</span>
+                    </p>
+                    {Array.from({ length: 5 }, (_, index) => (
+                        <span
+                        key={index}
+                        className={`star ${index < recipe.rating ? "filled" : ""}`}
+                        >
+                        &#9733;
+                        </span>
+                    ))}
+                    </div>
+                </div>
+                {/* Buttons */}
+                <div className="actionShareBtn d-flex">
+                    <Button className="button-fav me-2 fw-bold" onClick={saveRecipe}
+                        style={{
+                            backgroundColor: "#ffdcd5",
+                            color: "#72615d", 
+                            borderColor: "#acacac", 
+                            borderRadius: "5px", 
+                            padding: "0.5rem 1rem", 
+                            display: "flex",
+                            alignItems: "center"
+                          }}
+                    >
                     <img src={Favorites} alt="bookmark" />
                     {saveIsLoading ? (
-                      <Spinner style={{ width: "1rem", height: "1rem" }} />
+                        <Spinner style={{ width: "1rem", height: "1rem" }} />
                     ) : (
-                      <span>Save recipe</span>
+                        <span>Save recipe</span>
                     )}
-                  </Button>
-                  <Button className="button-fav " onClick={reportRecipe}>
-                    <img
-                      src={flag}
-                      alt="bookmark"
-                      style={{ height: "1.5rem" }}
-                    />
+                    </Button>
+                    <Button className="button-fav fw-bold" onClick={reportRecipe}
+                        style={{
+                            backgroundColor: "#fb2c2c",
+                            color: "#fce0e0", 
+                            borderColor: "#acacac", 
+                            borderRadius: "5px", 
+                            padding: "0.5rem 1rem", 
+                            display: "flex",
+                            alignItems: "center"
+                          }}
+                    >
+                    <img src={flag} alt="bookmark" style={{ height: "1.5rem" }} />
                     {reportIsLoading ? (
-                      <Spinner style={{ width: "1rem", height: "1rem" }} />
+                        <Spinner style={{ width: "1rem", height: "1rem" }} />
                     ) : (
-                      <span className="ms-2">Report recipe</span>
+                        <span className="ms-2">Report recipe</span>
                     )}
-                  </Button>
+                    </Button>
                 </div>
-              </div>
             </div>
-            {/* Recipe rating */}
-            <div className="numbered-timing mt-2">
-              <div className="second-time newRating">
-                <p>
-                  Rating: <span>{parseFloat(recipe.rating).toFixed(2)}</span>
-                </p>
-                {Array.from({ length: 5 }, (_, index) => (
-                  <span
-                    key={index}
-                    className={`star ${index < recipe.rating ? "filled" : ""}`}
-                  >
-                    &#9733;
-                  </span>
-                ))}
-              </div>
-            </div>
+
+
             <div className="mainSection mt-3">
               <div className="recipeNewImage">
                 <img
@@ -411,9 +398,7 @@ const RecipeDetails = () => {
               <PopularRecipes recipes={popularRecipes.slice(0, 3)} />
             </div>
             {/* Recipe description and ingredients */}
-            {/* TODO: You do not need the second dif, just add the css in the first dif */}
-            <div className="description-for-recipe mt-4">
-              <div className="flex-items" style={{ display: "flex" }}>
+            <div className="description-for-recipe mt-4 d-flex">
                 <div className="directions">
                   <h5>Directions</h5>
                   <p>{recipe.description}</p>
@@ -428,7 +413,6 @@ const RecipeDetails = () => {
                     </ul>
                   </div>
                 </div>
-              </div>
             </div>
             {/* User rating and save recipe button */}
             {userInfo.user.id !== recipe.user.id && (
@@ -450,14 +434,38 @@ const RecipeDetails = () => {
             {(userInfo.user.role === "Admin" ||
               userInfo.user.id === recipe.user.id) && (
               <div className="recipe-action-btns mt-4">
-                <button className="btn-edit" onClick={handleEdit}>
-                  Edit
+                <button className="btn-edit fw-bold" onClick={handleEdit}
+                    style={{
+                        backgroundColor: "#fcff99",
+                        color: "#000000", 
+                        borderColor: "#101010", 
+                        borderStyle: "solid", 
+                        borderWidth: "1px",
+                        borderRadius: "50px", 
+                        padding: "0.5rem 2rem", 
+                        display: "flex",
+                        alignItems: "center"
+                      }}
+                >
+                  Edit Recipe
                 </button>
-                <button className="btn-delete" onClick={handleDelete}>
+                <button className="btn-delete fw-bold" onClick={handleDelete}
+                    style={{
+                        backgroundColor: "#fa0000",
+                        color: "#fefefe", 
+                        borderColor: "#101010", 
+                        borderStyle: "solid", 
+                        borderWidth: "1px",
+                        borderRadius: "50px", 
+                        padding: "0.5rem 2rem", 
+                        display: "flex",
+                        alignItems: "center"
+                      }}
+                >
                   {deleteIsLoading ? (
                     <Spinner style={{ width: "1rem", height: "1rem" }} />
                   ) : (
-                    "Delete"
+                    "Delete Recipe"
                   )}
                 </button>
               </div>

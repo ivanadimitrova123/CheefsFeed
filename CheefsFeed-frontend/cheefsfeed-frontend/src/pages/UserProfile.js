@@ -4,6 +4,7 @@ import axios from "../axios/axios";
 import Navbar from "../components/navbar";
 import { Store } from "../Store";
 import FeedItem from "../components/FeedItem";
+import { getHeaders } from "../utils";
 
 function UserProfile() {
   const { state } = useContext(Store);
@@ -16,9 +17,7 @@ function UserProfile() {
   const [followLoading, setFollowLoading] = useState(false);
 
   useEffect(() => {
-    const headers = {
-      Authorization: `Bearer ${userInfo.token}`,
-    };
+    const headers = getHeaders(userInfo.token, false);
 
     const checkFollowStatus = async () => {
       try {
@@ -50,9 +49,7 @@ function UserProfile() {
 
   const handleFollow = async () => {
     setFollowLoading(true);
-    const headers = {
-      Authorization: `Bearer ${userInfo.token}`,
-    };
+    const headers = getHeaders(userInfo.token, false);
 
     try {
       await axios.post(`follow/${user.id}`, null, { headers });
@@ -66,9 +63,7 @@ function UserProfile() {
 
   const handleUnfollow = async () => {
     setFollowLoading(true);
-    const headers = {
-      Authorization: `Bearer ${userInfo.token}`,
-    };
+    const headers = getHeaders(userInfo.token, false);
 
     try {
       await axios.delete(`follow/${user.id}`, { headers });
