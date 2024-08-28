@@ -98,12 +98,9 @@ function RecipeForm() {
         );
 
         setIsLoading(false);
-        if (userInfo.user.role === "Admin") {
-          navigate(`/admin/dashboard`);
-        } else {
-          navigate(`/userProfile/${userInfo.user.id}`);
-        }
+        navigate(`/recipeDetails/${id}`);      
       } else {
+
         await axios.post(
             "/recipes",
           formData,

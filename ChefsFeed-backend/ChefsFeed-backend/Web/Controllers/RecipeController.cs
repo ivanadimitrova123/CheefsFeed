@@ -5,6 +5,8 @@ using System.Threading.Tasks;
 using ChefsFeed_backend.Data.Models;
 using ChefsFeed_backend.Services.Interfaces;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.EntityFrameworkCore;
+using ChefsFeed_backend.Repositories.Interfaces;
 
 [ApiController]
 [Route("api/recipes")]
@@ -12,10 +14,15 @@ using Microsoft.AspNetCore.Authorization;
 public class RecipeController : ControllerBase
 {
     private readonly IRecipeService _recipeService;
+    private readonly IRecipeRepository _recipeRepository;
+    private readonly IUserRepository _userRepository;
 
-    public RecipeController(IRecipeService recipeService)
+
+    public RecipeController(IRecipeService recipeService, IUserRepository userRepository, IRecipeRepository recipeRepository)
     {
         _recipeService = recipeService;
+        _userRepository = userRepository;
+        _recipeRepository = recipeRepository;
     }
 
     [HttpGet("popular")]
@@ -82,7 +89,14 @@ public class RecipeController : ControllerBase
     {
         var userId = GetUserIdFromClaims();
 
-        if (updatedRecipe.UserId != userId)
+        var existingRecipe = await _recipeRepository.GetRecipeByIdAsync(id);
+        if (existingRecipe == null)
+        {
+            return NotFound("Recipe not found");
+        }
+
+        var user = await _userRepository.GetUserByIdAsync(userId);
+        if (user.Role != "Admin" && existingRecipe.UserId != userId)
         {
             return Forbid("You are not authorized to edit this recipe.");
         }
