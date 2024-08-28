@@ -231,7 +231,7 @@ const RecipeDetails = () => {
   };
 
   return (
-    <div className="container-fluid">
+    <div className="container-fluid ">
       <Navbar />
       <div className="container mb-4">
         {recipe ? (
@@ -470,7 +470,6 @@ const RecipeDetails = () => {
             )}
             {/* TODO: comments part can be a separate component*/}
             {/* Comment section */}
-            {userInfo.user.id !== recipe.user.id && (
               <>
                 <h3 className="comment-heading mt-4">Comment</h3>
                 <div className="comment-form">
@@ -502,7 +501,7 @@ const RecipeDetails = () => {
                   </form>
                 </div>
               </>
-            )}
+            
             {/* Display comments */}
             {comments && comments.length > 0 && (
               <>

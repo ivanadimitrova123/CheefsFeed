@@ -17,9 +17,8 @@ const Comment = ({ comment, deleteHandler }) => {
     const formData = new FormData();
     formData.append("userId", userInfo.user.id);
     formData.append("commentId", comment.commentId);
-
     axios
-      .post(`/report`, formData, { headers })
+      .post(`/reportcomment`, formData, { headers })
       .then((response) => {
         //setReportIsLoading(false);
         toast.success(response.data);

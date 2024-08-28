@@ -23,8 +23,8 @@ public class ReportedCommentController : ControllerBase
 
         foreach (var rc in reportedComments)
         {
-            var img = rc.Comment.User.ProfilePictureId != null
-                ? $"{HttpContext.Request.Scheme}://{HttpContext.Request.Host}/api/image/{rc.Comment.User.ProfilePictureId}"
+            var img = rc.User.ProfilePictureId != null
+                ? $"{HttpContext.Request.Scheme}://{HttpContext.Request.Host}/api/image/{rc.User.ProfilePictureId}"
                 : "";
 
             result.Add(new

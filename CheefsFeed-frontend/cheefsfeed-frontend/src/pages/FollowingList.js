@@ -45,9 +45,9 @@ function FollowingList() {
   };
 
   return (
-    <div>
+    <div className="customBackground container-fluid">
       <Navbar />
-      <div className="container mt-5">
+      <div className="container mt-5 ">
         <h2>Your Following List</h2>
         {loading ? (
           <p>Loading...</p>

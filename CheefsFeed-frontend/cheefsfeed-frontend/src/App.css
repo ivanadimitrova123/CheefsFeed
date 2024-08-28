@@ -461,14 +461,14 @@ ul.navbar-nav {
   flex-wrap: nowrap;
 }
 
-.searchNav {
-  border: 1px solid rgba(255, 0, 0, 0.407);
+.navbar .searchNav {
+  border: 2px solid rgba(255, 0, 0, 0.407);
   border-radius: 5px;
-  padding-left: 5px;
-  padding-bottom: 3px;
+  padding-left: 10px;
+  padding-bottom: 4px;
 }
 
-.searchNav:focus {
+.navbar .searchNav:focus {
   outline: none;
 }
 
@@ -571,7 +571,7 @@ form.recipeDetailsForm {
 }
 
 .customBackground {
-  background-color: #ececec;
+  background-color: #f3f3f3;
   height: 100%;
 }
 
@@ -653,7 +653,7 @@ form.recipeDetailsForm {
 }
 
 .customBg {
-  background-color: #ececec;
+  background-color: #f3f3f3;
 }
 
 .errorMessage {

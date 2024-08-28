@@ -5,6 +5,8 @@ import NavDropdown from "react-bootstrap/NavDropdown";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { Store } from "../Store";
 import axios from "../axios/axios";
+import { getHeaders } from "../utils";
+import '../App.css';
 
 const Navbar = () => {
   const { state, dispatch: ctxDispatch } = useContext(Store);
@@ -17,9 +19,7 @@ const Navbar = () => {
 
   useEffect(() => {
     if (searchText.length > 0) {
-      const headers = {
-        Authorization: `Bearer ${userInfo.token}`,
-      };
+      const headers = getHeaders(userInfo.token, false);
 
       axios
         .get(`account/search?text=${searchText}`, { headers })
@@ -68,9 +68,9 @@ const Navbar = () => {
             </button>
             <div className="collapse navbar-collapse" id="navbarNav">
               <ul className="navbar-nav ms-auto">
-                <div className="position-relative">
+                <div className="position-relative me-2">
                   <input
-                    className="searchNav form-control"
+                    className="searchNav form-control me-2"
                     type="search"
                     value={searchText}
                     onChange={(e) => setSearchText(e.target.value)}
@@ -141,7 +141,7 @@ const Navbar = () => {
                     Following List
                   </Link>
                 </li>
-                <li className="nav-item mr-2">
+                <li className="nav-item me-2">
                   <Link to="/feed" className="nav-link">
                     Feed
                   </Link>

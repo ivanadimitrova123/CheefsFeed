@@ -170,12 +170,36 @@ function UserProfile() {
                   </p>
                   {user && userInfo.user.id === user.id && (
                     <div className="theBtns">
-                      <Link to="/recipeForm" className="btn btn-danger">
-                        <b>Add Recipe</b>
-                      </Link>
+                      <button style={{
+                            backgroundColor: "#f2c9d6",
+                            borderColor: "#acacac", 
+                            borderRadius: "5px", 
+                            padding: "0.5rem 1rem", 
+                            display: "flex",
+                            alignItems: "center"
+                            }}
+                      >
+                        <Link to="/recipeForm" style={{
+                            textDecoration: "none",
+                            color: "#72615d"
+                            }}
+                          >
+                          <b>Add Recipe</b>
+                        </Link>
+                      </button>
+                      
                       <button
-                        className="btn btn-primary "
+                        className=""
                         onClick={handleFollowing}
+                        style={{
+                          backgroundColor: "#f2c9d6",
+                          color: "#72615d", 
+                          borderColor: "#acacac", 
+                          borderRadius: "5px", 
+                          padding: "0.5rem 0.5rem", 
+                          display: "flex",
+                          alignItems: "center"
+                        }}
                       >
                         <b>Following List</b>
                       </button>
