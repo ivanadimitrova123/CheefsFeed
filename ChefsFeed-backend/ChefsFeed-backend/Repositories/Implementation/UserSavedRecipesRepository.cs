@@ -20,7 +20,7 @@ public class UserSavedRecipesRepository : IUserSavedRecipesRepository
 
     public async Task<Recipe> GetRecipeByIdAsync(long recipeId)
     {
-        return await _context.Recipes.SingleOrDefaultAsync(r => r.Id == recipeId);
+        return await _context.Recipes.Include(r => r.User).SingleOrDefaultAsync(r => r.Id == recipeId);
     }
 
     public async Task<UserSavedRecipe> GetUserSavedRecipeAsync(long userId, long recipeId)

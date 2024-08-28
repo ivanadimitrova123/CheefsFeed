@@ -44,6 +44,8 @@ const RecipeDetails = () => {
       .get(`recipes/${id}`, { headers })
       .then((response) => {
         setRecipe(response.data);
+        console.log("gi");
+        console.log(response.data);
         setRecipeUserImage(response.data.user.profilePictureId
             ? `${axios.defaults.baseURL}image/${response.data.user.profilePictureId}`
             : `${baseUrl}/default.jpg`);
@@ -63,8 +65,6 @@ const RecipeDetails = () => {
 
   useEffect(() => {
     const headers = getHeaders(userInfo.token, false);
-
-    console.log("pop");
     axios
       .get(`recipes/popular`, { headers })
       .then((response) => {
@@ -102,7 +102,6 @@ const RecipeDetails = () => {
     const headers = getHeaders(userInfo.token,false);
 
     if (recipe && recipe.id != null) {
-        console.log("coments");
       axios
         .get(`comments/${recipe.id}`, { headers })
         .then((response) => setComments(response.data))
@@ -144,7 +143,6 @@ const RecipeDetails = () => {
     formData.append("userId", userInfo.user.id);
     formData.append("recipeId", recipe.id);
     formData.append("grade", grade);
-    console.log("grade post");
     axios
       .post(`usergrades`, formData, { headers })
       .then(() => {

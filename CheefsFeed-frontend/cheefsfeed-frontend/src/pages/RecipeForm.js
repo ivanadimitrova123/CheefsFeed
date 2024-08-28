@@ -34,7 +34,7 @@ function RecipeForm() {
           },
         })
         .then((response) => {
-            console.log(response.data);
+          console.log(response.data);
           const fetchedRecipe = response.data;
 
           fetchedRecipe.ingredients = fetchedRecipe.ingredients.join("\n");
