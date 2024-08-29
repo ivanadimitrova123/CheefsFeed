@@ -18,7 +18,10 @@ public class ReportedCommentRepository : IReportedCommentRepository
 
     public async Task<IEnumerable<ReportedComment>> GetAllReportedCommentsAsync()
     {
-        return await _context.ReportedComments.ToListAsync();
+        return await _context.ReportedComments
+            .Include(rc => rc.Comment)
+            .Include(rc => rc.User)
+            .ToListAsync();
     }
 
     public async Task<ReportedComment> GetReportedCommentAsync(long userId, int commentId)

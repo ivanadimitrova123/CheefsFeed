@@ -54,13 +54,6 @@ public class ReportedCommentController : ControllerBase
         return Ok(result);
     }
 
-    [HttpDelete("{commentId}")]
-    public async Task<IActionResult> AllowReportedComment(int commentId)
-    {
-        var result = await _reportedCommentService.AllowReportedCommentAsync(commentId);
-        return Ok(result);
-    }
-
     [Authorize(Roles = "Admin")]
     [HttpDelete("delete/{commentId}")]
     public async Task<IActionResult> DeleteReportedComment(int commentId)

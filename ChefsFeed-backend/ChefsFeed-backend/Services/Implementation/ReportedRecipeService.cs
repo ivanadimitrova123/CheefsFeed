@@ -4,18 +4,22 @@ using ChefsFeed_backend.Data.Models;
 using ChefsFeed_backend.Repositories.Interfaces;
 using ChefsFeed_backend.Services.Interfaces;
 using Microsoft.AspNetCore.Http;
+using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
+using System.ComponentModel.Design;
 using System.Linq;
 using System.Threading.Tasks;
 
 public class ReportedRecipeService : IReportedRecipeService
 {
     private readonly IReportedRecipeRepository _reportedRecipeRepository;
+    private readonly IRecipeRepository _recipeRepository;
     private readonly IHttpContextAccessor _httpContextAccessor;
 
-    public ReportedRecipeService(IReportedRecipeRepository reportedRecipeRepository, IHttpContextAccessor httpContextAccessor)
+    public ReportedRecipeService(IReportedRecipeRepository reportedRecipeRepository, IRecipeRepository recipeRepository, IHttpContextAccessor httpContextAccessor)
     {
         _reportedRecipeRepository = reportedRecipeRepository;
+        _recipeRepository = recipeRepository;
         _httpContextAccessor = httpContextAccessor;
     }
 
@@ -62,9 +66,26 @@ public class ReportedRecipeService : IReportedRecipeService
         return "Recipe Reported";
     }
 
-    public async Task<string> AllowReportedRecipeAsync(long recipeId)
+    public async Task<string> DeleteReportedRecipeAsync(long recipeId)
     {
+        var reportedRecipe = _reportedRecipeRepository.GetReportedRecipesByRecipeIdAsync(recipeId);
+        if (reportedRecipe == null)
+        {
+            return "Reported recipe does not exist";
+        }
         await _reportedRecipeRepository.RemoveReportedRecipeAsync(recipeId);
-        return "Recipe Report Removed";
+        var recipe = _recipeRepository.GetRecipeByIdAsync(recipeId);
+        if (recipe != null)
+        {
+            await _recipeRepository.DeleteRecipeAsync(recipeId);
+        }
+
+        return "Recipe deleted";
+
     }
+
+
+
 }
+
+

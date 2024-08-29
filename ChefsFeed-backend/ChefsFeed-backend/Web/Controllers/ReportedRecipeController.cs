@@ -30,10 +30,10 @@ namespace ChefsFeed_backend.Web.Controllers
         }
 
         [Authorize(Roles = "Admin")]
-        [HttpDelete("{recipeId}")]
-        public async Task<IActionResult> AllowReportedRecipe(long recipeId)
+        [HttpDelete("delete/{recipeId}")]
+        public async Task<IActionResult> DeleteReportedRecipe(long recipeId)
         {
-            var result = await _reportedRecipeService.AllowReportedRecipeAsync(recipeId);
+            var result = await _reportedRecipeService.DeleteReportedRecipeAsync(recipeId);
             return Ok(result);
         }
     }

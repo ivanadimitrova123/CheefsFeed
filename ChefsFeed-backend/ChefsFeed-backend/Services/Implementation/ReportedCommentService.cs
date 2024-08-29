@@ -2,6 +2,7 @@
 
 using ChefsFeed_backend.Data;
 using ChefsFeed_backend.Data.Models;
+using ChefsFeed_backend.Repositories.Interfaces;
 using ChefsFeed_backend.Services.Interfaces;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
@@ -9,39 +10,30 @@ using System.Threading.Tasks;
 
 public class ReportedCommentService : IReportedCommentService
 {
-    private readonly ApplicationDbContext _context;
-
-    public ReportedCommentService(ApplicationDbContext context)
+    private readonly IReportedCommentRepository _reportedCommentRepository;
+    private readonly IUserRepository _userRepository;
+    private readonly ICommentRepository _commentRepository;
+    public ReportedCommentService(IReportedCommentRepository reportedCommentRepository, IUserRepository userRepository, ICommentRepository commentRepository)
     {
-        _context = context;
+        _reportedCommentRepository = reportedCommentRepository;
+        _userRepository = userRepository;
+        _commentRepository = commentRepository; 
     }
 
     public async Task<IEnumerable<ReportedComment>> GetReportedCommentsAsync()
     {
-        return await _context.ReportedComments
-            .Include(rc => rc.Comment)
-            .Include(rc => rc.User)
-            .ToListAsync();
+        return await _reportedCommentRepository.GetAllReportedCommentsAsync();
     }
 
     public async Task<string> ReportCommentAsync(long userId, int commentId)
     {
-        var userExists = await _context.Users.AnyAsync(u => u.Id == userId);
-        if (!userExists)
-        {
-            return "User does not exist";
-        }
+        var user = _userRepository.GetUserByIdAsync(userId);
 
-        var commentExists = await _context.Comments.AnyAsync(c => c.CommentId == commentId);
-        if (!commentExists)
-        {
-            return "Comment does not exist";
-        }
+        var comment = _commentRepository.GetCommentByIdAsync(commentId);
 
-        var alreadyReported = await _context.ReportedComments
-            .AnyAsync(rc => rc.UserId == userId && rc.CommentId == commentId);
-
-        if (alreadyReported)
+        var alreadyReported =await _reportedCommentRepository.GetReportedCommentAsync(userId, commentId);
+      
+        if (alreadyReported != null)
         {
             return "Already reported";
         }
@@ -52,50 +44,27 @@ public class ReportedCommentService : IReportedCommentService
             CommentId = commentId
         };
 
-        await _context.ReportedComments.AddAsync(newReportedComment);
-        await _context.SaveChangesAsync();
+        await _reportedCommentRepository.AddReportedCommentAsync(newReportedComment);
 
         return "Comment Reported";
     }
 
-    public async Task<string> AllowReportedCommentAsync(int commentId)
-    {
-        var reportedComment = await _context.ReportedComments
-            .FirstOrDefaultAsync(rc => rc.CommentId == commentId);
-
-        if (reportedComment == null)
-        {
-            return "Reported comment does not exist";
-        }
-
-        _context.ReportedComments.Remove(reportedComment);
-        await _context.SaveChangesAsync();
-
-        return "Reported comment allowed";
-    }
-
     public async Task<string> DeleteReportedCommentAsync(int commentId)
     {
-        var reportedComment = await _context.ReportedComments
-            .FirstOrDefaultAsync(rc => rc.CommentId == commentId);
+        var reportedComment = await _reportedCommentRepository.GetReportedCommentsByCommentIdAsync(commentId);
 
         if (reportedComment == null)
         {
             return "Reported comment does not exist";
         }
+        await _reportedCommentRepository.RemoveReportedCommentAsync(commentId);
 
-        _context.ReportedComments.Remove(reportedComment);
-
-        var comment = await _context.Comments
-            .FirstOrDefaultAsync(c => c.CommentId == commentId);
+        var comment = _commentRepository.GetCommentByIdAsync(commentId);
 
         if (comment != null)
         {
-            _context.Comments.Remove(comment);
+            await _commentRepository.DeleteCommentAsync(commentId);
         }
-
-        await _context.SaveChangesAsync();
-
         return "Comment deleted";
     }
 }

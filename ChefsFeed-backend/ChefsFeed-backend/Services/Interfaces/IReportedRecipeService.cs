@@ -3,5 +3,5 @@ public interface IReportedRecipeService
 {
     Task<IEnumerable<object>> GetReportedRecipesAsync();
     Task<string> ReportRecipeAsync(long userId, long recipeId);
-    Task<string> AllowReportedRecipeAsync(long recipeId);
+    Task<string> DeleteReportedRecipeAsync(long recipeId);
 }

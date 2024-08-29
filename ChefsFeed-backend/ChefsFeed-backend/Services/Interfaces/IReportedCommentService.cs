@@ -8,6 +8,5 @@ public interface IReportedCommentService
 {
     Task<IEnumerable<ReportedComment>> GetReportedCommentsAsync();
     Task<string> ReportCommentAsync(long userId, int commentId);
-    Task<string> AllowReportedCommentAsync(int commentId);
     Task<string> DeleteReportedCommentAsync(int commentId);
 }

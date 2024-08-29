@@ -5,7 +5,6 @@ import axios from "../axios/axios";
 import { useNavigate } from "react-router-dom";
 import { Spinner } from "react-bootstrap";
 import { getHeaders } from "../utils";
-
 const Dashboard = () => {
   const navigate = useNavigate();
   const { state } = useContext(Store);
@@ -15,23 +14,9 @@ const Dashboard = () => {
   const [recipes, setRecipes] = useState([]);
   const [recipesIsLoading, setRecipesIsLoading] = useState(false);
   const [commentRefesh, setCommentRefesh] = useState(false);
-  const [commentAllowLoading, setCommentAllowLoading] = useState(false);
   const [commentDeleteLoading, setCommentDeleteLoading] = useState(false);
-  const [recipeAllowLoading, setRecipeAllowLoading] = useState(false);
+  const [recipeDeleteLoading, setRecipeDeleteLoading] = useState(false);
   const [recipeRefresh, setRecipeRefresh] = useState(false);
-
-  const allowHandler = async (id) => {
-    const headers = getHeaders(userInfo.token, false);
-    setCommentAllowLoading(true);
-    try {
-      await axios.delete(`/reportcomment/${id}`, { headers });
-      setCommentAllowLoading(false);
-      setCommentRefesh(true);
-    } catch (error) {
-      setCommentAllowLoading(false);
-      console.error("Error allowing comment:", error);
-    }
-  };
 
   const deleteHandler = async (id) => {
     const headers = getHeaders(userInfo.token, false);
@@ -46,16 +31,16 @@ const Dashboard = () => {
     }
   };
 
-  const allowRecipe = async (id) => {
+  const deleteRecipe = async (id) => {
     const headers = getHeaders(userInfo.token, false);
-    setRecipeAllowLoading(true);
+    setRecipeDeleteLoading(true);
     try {
-      await axios.delete(`/reportedrecipe/${id}`, { headers });
-      setRecipeAllowLoading(false);
+      await axios.delete(`/reportedrecipe/delete/${id}`, { headers });
+      setRecipeDeleteLoading(false);
       setRecipeRefresh(true);
     } catch (error) {
-      setRecipeAllowLoading(false);
-      console.error("Error allowing recipe:", error);
+        setRecipeDeleteLoading(false);
+      console.error("Error deleting recipe:", error);
     }
   };
 
@@ -141,18 +126,14 @@ const Dashboard = () => {
                     style={{ width: "30px", height: "30px" }}
                   />
                   <b className="ms-2">{c.user.username}</b>
-                  <p>{c.comment.content}</p>
+                  <span className="ms-3">{c.comment.content}</span>
                 </div>
                 <div>
                   <button
                     className="me-2 btn btn-primary"
-                    onClick={() => allowHandler(c.commentId)}
-                  >
-                    {commentAllowLoading ? (
-                      <Spinner style={{ width: "1rem", height: "1rem" }} />
-                    ) : (
-                      "Allow"
-                    )}
+                    onClick={() => navigate(`/recipeDetails/${c.comment.recipeId}`)}
+                    >
+                    View
                   </button>
                   <button
                     className="me-2 btn btn-danger"
@@ -203,19 +184,19 @@ const Dashboard = () => {
                 <div>
                   <button
                     className="me-2 btn btn-primary"
-                    onClick={() => allowRecipe(r.recipeId)}
-                  >
-                    {recipeAllowLoading ? (
-                      <Spinner style={{ width: "1rem", height: "1rem" }} />
-                    ) : (
-                      "Allow"
-                    )}
-                  </button>
-                  <button
-                    className="me-2 btn btn-primary"
                     onClick={() => navigate(`/recipeDetails/${r.recipeId}`)}
                   >
                     View
+                  </button>
+                  <button
+                    className="me-2 btn btn-danger"
+                    onClick={() => deleteRecipe(r.recipeId)}
+                  >
+                    {recipeDeleteLoading ? (
+                      <Spinner style={{ width: "1rem", height: "1rem" }} />
+                    ) : (
+                      "Delete"
+                    )}
                   </button>
                 </div>
               </div>
