@@ -38,7 +38,30 @@ public class UserSavedRecipesRepository : IUserSavedRecipesRepository
     {
         return await _context.UserSavedRecipe.Where(usr => usr.UserId == userId).ToListAsync();
     }
+   
+    public async Task<List<Recipe>> GetSavedRecipesByUserIdAndCategoryIdAsync(long userId, long categoryId)
+    {
+        var savedRecipes = await _context.UserSavedRecipe
+            .Join(
+                _context.Recipes,
+                usr => usr.RecipeId,
+                r => r.Id,
+                (usr, r) => new { usr, r }
+            )
+            .Where(joined => joined.usr.UserId == userId &&
+                             joined.r.Categories.Any(c => c.Id == categoryId))
+            .Select(joined => joined.r)
+            .Distinct()
+            .ToListAsync();
 
+        return savedRecipes;
+    }
+
+
+    public int GetCommentsCountForRecipe(long recipeId)
+    {
+        return _context.Comments.Count(c => c.RecipeId == recipeId);
+    }
     public async Task<int> GetCommentsCountForRecipeAsync(long recipeId)
     {
         return await _context.Comments.CountAsync(c => c.RecipeId == recipeId);

@@ -29,7 +29,6 @@ namespace ChefsFeed_backend.Services.Implementation
 
             foreach (var recipe in recipes)
             {
-                // Construct the image URL using HttpContext
                 string imgUrl = $"{_httpContextAccessor.HttpContext.Request.Scheme}://{_httpContextAccessor.HttpContext.Request.Host}/api/image/{recipe.PictureId}";
 
                 editedRecipes.Add(new
@@ -45,8 +44,6 @@ namespace ChefsFeed_backend.Services.Implementation
 
             return editedRecipes;
         }
-
-
         public async Task<IEnumerable<RecipeDto>> GetRecipesByUserIdAsync(long userId)
         {
             var recipes = await _recipeRepository.GetRecipesByUserIdAsync(userId);

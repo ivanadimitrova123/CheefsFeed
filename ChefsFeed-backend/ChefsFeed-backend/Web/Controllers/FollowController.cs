@@ -1,5 +1,7 @@
 ﻿namespace ChefsFeed_backend.Web.Controllers;
 using System.Security.Claims;
+using ChefsFeed_backend.Data.Models;
+using ChefsFeed_backend.Services.Implementation;
 using ChefsFeed_backend.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 
@@ -70,8 +72,6 @@ public class FollowController : ControllerBase
     public IActionResult GetRecipesOfFollowedUsers()
     {
         var userId = GetUserId();
-
-        // Get the request scheme and host from HttpContext
         var requestScheme = HttpContext.Request.Scheme;
         var requestHost = HttpContext.Request.Host.ToString();
 
@@ -83,6 +83,20 @@ public class FollowController : ControllerBase
         }
 
         return Ok(recipesWithImages);
+    }
+
+    [HttpGet("recipeByCategory")]
+    public IActionResult GetRecipesOfFollowedUsersByCategory(long categoryId)
+    {
+        var userId = GetUserId();
+        var requestScheme = HttpContext.Request.Scheme;
+        var requestHost = HttpContext.Request.Host.ToString();
+
+        var recipes = _followService.GetRecipesOfFollowedUsersByCategory(userId, requestScheme, requestHost,categoryId);
+        if (recipes == null) {
+            return NotFound("Not found.");
+        }
+        return Ok(recipes);
     }
 
 

@@ -22,7 +22,7 @@ namespace ChefsFeed_backend.Repositories.Implementation
         {
             return await _context.Recipes.Where(r => r.UserId == userId).ToListAsync();
         }
-
+        
         public async Task<Recipe> GetRecipeByIdAsync(long id)
         {
             return await _context.Recipes

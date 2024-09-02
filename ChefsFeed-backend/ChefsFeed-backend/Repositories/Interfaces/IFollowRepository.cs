@@ -5,6 +5,7 @@ namespace ChefsFeed_backend.Repositories.Interfaces;
 public interface IFollowRepository
 {
     User GetUserWithFollowersAndFollowing(long userId);
+    User GetUserWithFollowingByCategory(long userId);
     User GetUserWithFollowing(long userId);
     User GetUserWithProfilePictureAndFollowing(long userId);
     User GetFollowedUserWithFollowing(long followedUserId);

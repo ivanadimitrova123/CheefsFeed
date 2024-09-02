@@ -12,5 +12,6 @@ namespace ChefsFeed_backend.Services.Interfaces
         Task CreateRecipeAsync(Recipe recipe, long id, byte[] photoData, string photoContentType, List<long> selectedCategoryIds);
         Task UpdateRecipeAsync(long id, Recipe updatedRecipe, byte[] photoData, string photoContentType, List<long> selectedCategoryIds);
         Task DeleteRecipeAsync(long id);
+        
     }
 }

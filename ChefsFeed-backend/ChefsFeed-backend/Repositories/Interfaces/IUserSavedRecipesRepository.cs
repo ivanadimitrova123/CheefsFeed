@@ -9,5 +9,6 @@ public interface IUserSavedRecipesRepository
     Task<UserSavedRecipe> GetUserSavedRecipeAsync(long userId, long recipeId);
     Task SaveRecipeAsync(UserSavedRecipe userSavedRecipe);
     Task<List<UserSavedRecipe>> GetSavedRecipesByUserIdAsync(long userId);
-    Task<int> GetCommentsCountForRecipeAsync(long recipeId);
+    Task<List<Recipe>> GetSavedRecipesByUserIdAndCategoryIdAsync(long userId, long categoryId);
+    int GetCommentsCountForRecipe(long recipeId);
 }

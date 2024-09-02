@@ -89,4 +89,32 @@ public class FollowService : IFollowService
         })).ToList<object>();
     }
 
+    public List<dynamic> GetRecipesOfFollowedUsersByCategory(long userId, string requestScheme, string requestHost, long categoryId)
+    {
+        var user = _followRepository.GetUserWithFollowingByCategory(userId);
+        if (user == null) return null;
+
+        var recipesOfFollowedUsers = user.Following.SelectMany(followedUser => followedUser.Recipes
+            .Where(recipe => recipe.Categories.Any(c => c.Id == categoryId))
+            .Select(recipe => new
+            {
+                recipe = new
+                {
+                    recipe.Id,
+                    recipe.Name,
+                    recipe.PictureId,
+                    RecipeImage = $"{requestScheme}://{requestHost}/api/image/{recipe.PictureId}",
+                    Comments = _followRepository.GetCommentsCountForRecipe(recipe.Id),
+                    recipe.Rating
+                },
+                user = new
+                {
+                    userImage = $"{requestScheme}://{requestHost}/api/image/{followedUser.ProfilePictureId}",
+                    followedUser.Username
+                }
+            })).ToList<dynamic>();
+
+        return recipesOfFollowedUsers;
+    }
+
 }

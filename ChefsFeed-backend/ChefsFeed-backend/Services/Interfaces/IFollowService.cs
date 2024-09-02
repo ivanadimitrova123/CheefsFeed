@@ -9,4 +9,7 @@ public interface IFollowService
     string UnfollowUser(long userId, long followedUserId);
     List<UserDto> GetFollowingUsers(long userId, HttpContext httpContext);
     List<object> GetRecipesOfFollowedUsers(long userId, string requestScheme, string requestHost);
+    List<dynamic> GetRecipesOfFollowedUsersByCategory(long userId, string requestScheme, string requestHost, long categoryId);
+
+
 }

@@ -29,6 +29,15 @@ public class FollowRepository : IFollowRepository
             .FirstOrDefault(u => u.Id == userId);
     }
 
+    public User GetUserWithFollowingByCategory(long userId)
+    {
+        return _context.Users
+            .Include(u => u.Following)
+            .ThenInclude(f => f.Recipes)
+            .ThenInclude(r => r.Categories) 
+            .FirstOrDefault(u => u.Id == userId);
+    }
+
     public User GetUserWithProfilePictureAndFollowing(long userId)
     {
         return _context.Users
