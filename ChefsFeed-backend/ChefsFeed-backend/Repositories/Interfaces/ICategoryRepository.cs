@@ -4,7 +4,7 @@ namespace ChefsFeed_backend.Repositories.Interfaces
 {
     public interface ICategoryRepository
     {
-        Task AddCategoryAsync(Category category);
         Task<Category> GetCategoryByIdAsync(long id);
+        Task AddCategoryAsync(Category category);
     }
 }

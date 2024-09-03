@@ -11,13 +11,11 @@ namespace ChefsFeed_backend.Services.Implementation
     {
         private readonly IUserSavedRecipesRepository _repository;
         private readonly IUserRepository _userrepository;
-        private readonly IHttpContextAccessor _httpContextAccessor;
 
-        public UserSavedRecipesService(IUserSavedRecipesRepository repository, IUserRepository userRepository, IHttpContextAccessor httpContextAccessor)
+        public UserSavedRecipesService(IUserSavedRecipesRepository repository, IUserRepository userRepository)
         {
             _repository = repository;
             _userrepository = userRepository;
-            _httpContextAccessor = httpContextAccessor;
         }
 
         public async Task<IActionResult> SaveRecipeAsync(long recipeId, long userId, HttpContext httpContext)
@@ -97,35 +95,7 @@ namespace ChefsFeed_backend.Services.Implementation
             return new OkObjectResult(recipesList);
         }
 
-        //public async Task<List<Recipe>> GetSavedRecipesByCategoryAsync(long userId, long categoryId)
-        //{
-        //    return await _repository.GetSavedRecipesByUserIdAndCategoryIdAsync(userId, categoryId);
-        //}
-
-        //public async Task<List<dynamic>> GetSavedRecipesByCategoryAsync(long userId, long categoryId)
-        //{
-        //    var savedRecipes = await _repository.GetSavedRecipesByUserIdAndCategoryIdAsync(userId, categoryId);
-
-        //    if (savedRecipes == null || !savedRecipes.Any())
-        //    {
-        //        return new List<dynamic>();
-        //    }
-        //   // User u =await _userrepository.GetUserByIdAsync(Recipe.UserId);
-
-        //    var recipeDetails = savedRecipes.Select(recipe => new
-        //    {
-        //        //UserImage = $"{_httpContextAccessor.HttpContext.Request.Scheme}://{_httpContextAccessor.HttpContext.Request.Host}/api/image/{u.ProfilePictureId}",
-        //        //Username = u.Username,
-        //        RecipeId = recipe.Id,
-        //        RecipeName = recipe.Name,
-        //        RecipeImage = $"{_httpContextAccessor.HttpContext.Request.Scheme}://{_httpContextAccessor.HttpContext.Request.Host}/api/image/{recipe.PictureId}",
-        //        Rating = recipe.Rating,
-        //        CommentCount = _repository.GetCommentsCountForRecipe(recipe.Id)
-        //    }).ToList<dynamic>();
-
-        //    return recipeDetails;
-        //}
-        public async Task<List<dynamic>> GetSavedRecipesByCategoryAsync(long userId, long categoryId)
+        public async Task<List<dynamic>> GetSavedRecipesByCategoryAsync(long userId, long categoryId, HttpContext httpContext)
         {
             var savedRecipes = await _repository.GetSavedRecipesByUserIdAndCategoryIdAsync(userId, categoryId);
 
@@ -134,14 +104,11 @@ namespace ChefsFeed_backend.Services.Implementation
                 return new List<dynamic>();
             }
 
-            var httpContext = _httpContextAccessor.HttpContext;
-            var requestScheme = httpContext?.Request.Scheme ?? "http";
-            var requestHost = httpContext?.Request.Host.ToString() ?? "localhost";
+            var requestScheme = httpContext.Request.Scheme;
+            var requestHost = httpContext.Request.Host.ToString();
 
-            // Create a list of tasks to fetch user details
             var tasks = savedRecipes.Select(async recipe =>
             {
-                // Fetch the user for the recipe
                 var user = await _userrepository.GetUserByIdAsync(recipe.UserId);
 
                 return new
@@ -164,7 +131,6 @@ namespace ChefsFeed_backend.Services.Implementation
 
             return recipeDetails.ToList<dynamic>();
         }
-
 
     }
 }

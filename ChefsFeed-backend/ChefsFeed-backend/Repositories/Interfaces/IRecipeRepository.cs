@@ -4,12 +4,12 @@ namespace ChefsFeed_backend.Repositories.Interfaces
 {
     public interface IRecipeRepository
     {
-        Task<IEnumerable<Recipe>> GetPopularRecipesAsync();
         Task<IEnumerable<Recipe>> GetRecipesByUserIdAsync(long userId);
-        Task<Recipe> GetRecipeByIdAsync(long id);
         Task<IEnumerable<Recipe>> SearchRecipesAsync(string text);
-        Task AddRecipeAsync(Recipe recipe);
+        Task<IEnumerable<Recipe>> GetPopularRecipesAsync();
+        Task<Recipe> GetRecipeByIdAsync(long id);
         Task UpdateRecipeAsync(Recipe recipe);
+        Task AddRecipeAsync(Recipe recipe);
         Task DeleteRecipeAsync(long id);
     }
 }

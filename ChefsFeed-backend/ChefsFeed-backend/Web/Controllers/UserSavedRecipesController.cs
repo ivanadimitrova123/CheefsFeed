@@ -32,7 +32,7 @@ public class UserSavedRecipesController : ControllerBase
     public async Task<IActionResult> GetSavedRecipesByCategory(long categoryId)
     {
         var userId = GetUserId(); 
-        var recipes = await _userSavedRecipesService.GetSavedRecipesByCategoryAsync(userId, categoryId);
+        var recipes = await _userSavedRecipesService.GetSavedRecipesByCategoryAsync(userId, categoryId, HttpContext);
 
         if (recipes == null || !recipes.Any())
         {

@@ -129,13 +129,22 @@ public class RecipeController : ControllerBase
     public async Task<IActionResult> DeleteRecipe(long id)
     {
         var userId = GetUserIdFromClaims();
-
-        // Optionally: Check if user is authorized to delete (e.g., Admin )
-
+        var currentUserRole = GetUserRoleFromClaims();
         try
         {
-            await _recipeService.DeleteRecipeAsync(id);
-            return NoContent();
+            var recipe = await _recipeService.GetRecipeByIdAsync(id);
+
+            if (recipe == null)
+            {
+                return NotFound("Recipe not found.");
+            }
+            if (currentUserRole == "Admin" || recipe.UserId == userId)
+            {
+                await _recipeService.DeleteRecipeAsync(id);
+                return NoContent();
+            }
+
+            return Forbid("You do not have permission to delete this recipe.");
         }
         catch (KeyNotFoundException)
         {
@@ -152,5 +161,9 @@ public class RecipeController : ControllerBase
             throw new UnauthorizedAccessException("User not found or conversion failed.");
         }
         return userId;
+    }
+    private string GetUserRoleFromClaims()
+    {
+        return User.FindFirst(ClaimTypes.Role)?.Value ?? "User";
     }
 }

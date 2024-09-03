@@ -4,8 +4,8 @@ namespace ChefsFeed_backend.Repositories.Interfaces;
 
 public interface IUserGradesRepository
 {
-    Task<UserGrades> GetUserGradeAsync(long userId, long recipeId);
     Task<IEnumerable<UserGrades>> GetUserGradesByRecipeIdAsync(long recipeId);
-    Task AddUserGradeAsync(UserGrades userGrade);
+    Task<UserGrades> GetUserGradeAsync(long userId, long recipeId);
     Task UpdateUserGradeAsync(UserGrades userGrade);
+    Task AddUserGradeAsync(UserGrades userGrade);
 }

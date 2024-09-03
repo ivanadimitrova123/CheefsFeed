@@ -53,9 +53,16 @@ namespace ChefsFeed_backend.Repositories.Implementation
 
         public async Task DeleteRecipeAsync(long id)
         {
-            var recipe = await _context.Recipes.FindAsync(id);
+            var recipe = await _context.Recipes
+                               .Include(r => r.Categories)
+                               .FirstOrDefaultAsync(r => r.Id == id);
+
             if (recipe != null)
             {
+                if (recipe.Categories.Any())
+                {
+                    _context.Category.RemoveRange(recipe.Categories);
+                }
                 _context.Recipes.Remove(recipe);
                 await _context.SaveChangesAsync();
             }

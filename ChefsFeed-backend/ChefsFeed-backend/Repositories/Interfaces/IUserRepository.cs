@@ -4,14 +4,14 @@ namespace ChefsFeed_backend.Repositories.Interfaces
 {
     public interface IUserRepository
     {
+        Task<User> GetUserByUsernameOrEmailAsync(string usernameOrEmail);
+        Task<IEnumerable<User>> SearchUsersAsync(string text);
+        Task<User> GetUserByUsernameAsync(string username);
+        Task<User> GetUserByEmailAsync(string email);
         Task<IEnumerable<User>> GetAllUsersAsync();
         Task<User> GetUserByIdAsync(long userId);
-        Task<User> GetUserByUsernameOrEmailAsync(string usernameOrEmail);
         Task AddUserAsync(User user);
         Task SaveChangesAsync();
-        Task<IEnumerable<User>> SearchUsersAsync(string text);
-        Task<User> GetUserByEmailAsync(string email);
-        Task<User> GetUserByUsernameAsync(string username);
 
     }
 }

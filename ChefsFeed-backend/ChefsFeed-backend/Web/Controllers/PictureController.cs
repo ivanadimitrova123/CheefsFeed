@@ -4,7 +4,6 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using ChefsFeed_backend.Services.Interfaces;
 
-//upload  getId
 [Route("api/image")]
 [ApiController]
 public class PictureController : ControllerBase
@@ -55,6 +54,6 @@ public class PictureController : ControllerBase
             return NotFound("Image not found");
         }
 
-        return File(imageData, "image/jpeg"); // Use the appropriate content type here
+        return File(imageData, "image/jpeg");
     }
 }
