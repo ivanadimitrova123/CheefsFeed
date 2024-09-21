@@ -33,7 +33,9 @@ public class Recipe
     public ICollection<UserSavedRecipe> SavedRecepies { get; set; } = new List<UserSavedRecipe>();
     public ICollection<UserGrades> UsersGrades { get; set; } = new List<UserGrades>();
 
-    public ICollection<Category> Categories { get; set; } = new List<Category>();
+    public long CategoryId { get; set; }
 
+    [ForeignKey("CategoryId")]
+    public Category? Category { get; set; }
 
 }

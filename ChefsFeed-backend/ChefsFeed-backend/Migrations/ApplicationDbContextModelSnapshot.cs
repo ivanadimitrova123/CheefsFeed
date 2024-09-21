@@ -4,20 +4,17 @@ using System.Collections.Generic;
 using ChefsFeed_backend.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
-using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 #nullable disable
 
-namespace ChefsFeed_backend.Data.Migrations
+namespace ChefsFeed_backend.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20240808184006_AddedGradesMigration")]
-    partial class AddedGradesMigration
+    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
     {
-        /// <inheritdoc />
-        protected override void BuildTargetModel(ModelBuilder modelBuilder)
+        protected override void BuildModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -38,12 +35,7 @@ namespace ChefsFeed_backend.Data.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<long?>("RecipeId")
-                        .HasColumnType("bigint");
-
                     b.HasKey("Id");
-
-                    b.HasIndex("RecipeId");
 
                     b.ToTable("Category");
                 });
@@ -116,6 +108,9 @@ namespace ChefsFeed_backend.Data.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
 
+                    b.Property<long>("CategoryId")
+                        .HasColumnType("bigint");
+
                     b.Property<string>("Cook")
                         .IsRequired()
                         .HasColumnType("text");
@@ -159,12 +154,44 @@ namespace ChefsFeed_backend.Data.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("CategoryId");
+
                     b.HasIndex("PictureId")
                         .IsUnique();
 
                     b.HasIndex("UserId");
 
                     b.ToTable("Recipes");
+                });
+
+            modelBuilder.Entity("ChefsFeed_backend.Data.Models.ReportedComment", b =>
+                {
+                    b.Property<long>("UserId")
+                        .HasColumnType("bigint");
+
+                    b.Property<int>("CommentId")
+                        .HasColumnType("integer");
+
+                    b.HasKey("UserId", "CommentId");
+
+                    b.HasIndex("CommentId");
+
+                    b.ToTable("ReportedComments");
+                });
+
+            modelBuilder.Entity("ChefsFeed_backend.Data.Models.ReportedRecipe", b =>
+                {
+                    b.Property<long>("UserId")
+                        .HasColumnType("bigint");
+
+                    b.Property<long>("RecipeId")
+                        .HasColumnType("bigint");
+
+                    b.HasKey("UserId", "RecipeId");
+
+                    b.HasIndex("RecipeId");
+
+                    b.ToTable("ReportedRecipes");
                 });
 
             modelBuilder.Entity("ChefsFeed_backend.Data.Models.User", b =>
@@ -210,6 +237,24 @@ namespace ChefsFeed_backend.Data.Migrations
                     b.ToTable("Users");
                 });
 
+            modelBuilder.Entity("ChefsFeed_backend.Data.Models.UserGrades", b =>
+                {
+                    b.Property<long>("UserId")
+                        .HasColumnType("bigint");
+
+                    b.Property<long>("RecipeId")
+                        .HasColumnType("bigint");
+
+                    b.Property<int>("Grade")
+                        .HasColumnType("integer");
+
+                    b.HasKey("UserId", "RecipeId");
+
+                    b.HasIndex("RecipeId");
+
+                    b.ToTable("UserGrades");
+                });
+
             modelBuilder.Entity("ChefsFeed_backend.Data.Models.UserSavedRecipe", b =>
                 {
                     b.Property<long>("UserId")
@@ -240,13 +285,6 @@ namespace ChefsFeed_backend.Data.Migrations
                     b.ToTable("UserUser");
                 });
 
-            modelBuilder.Entity("ChefsFeed_backend.Data.Models.Category", b =>
-                {
-                    b.HasOne("ChefsFeed_backend.Data.Models.Recipe", null)
-                        .WithMany("Categories")
-                        .HasForeignKey("RecipeId");
-                });
-
             modelBuilder.Entity("ChefsFeed_backend.Data.Models.Comment", b =>
                 {
                     b.HasOne("ChefsFeed_backend.Data.Models.Comment", "Parent")
@@ -274,6 +312,12 @@ namespace ChefsFeed_backend.Data.Migrations
 
             modelBuilder.Entity("ChefsFeed_backend.Data.Models.Recipe", b =>
                 {
+                    b.HasOne("ChefsFeed_backend.Data.Models.Category", "Category")
+                        .WithMany("Recipes")
+                        .HasForeignKey("CategoryId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("ChefsFeed_backend.Data.Models.Picture", "Picture")
                         .WithOne()
                         .HasForeignKey("ChefsFeed_backend.Data.Models.Recipe", "PictureId")
@@ -285,7 +329,47 @@ namespace ChefsFeed_backend.Data.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.Navigation("Category");
+
                     b.Navigation("Picture");
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("ChefsFeed_backend.Data.Models.ReportedComment", b =>
+                {
+                    b.HasOne("ChefsFeed_backend.Data.Models.Comment", "Comment")
+                        .WithMany()
+                        .HasForeignKey("CommentId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("ChefsFeed_backend.Data.Models.User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Comment");
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("ChefsFeed_backend.Data.Models.ReportedRecipe", b =>
+                {
+                    b.HasOne("ChefsFeed_backend.Data.Models.Recipe", "Recipe")
+                        .WithMany()
+                        .HasForeignKey("RecipeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("ChefsFeed_backend.Data.Models.User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Recipe");
 
                     b.Navigation("User");
                 });
@@ -297,6 +381,25 @@ namespace ChefsFeed_backend.Data.Migrations
                         .HasForeignKey("ChefsFeed_backend.Data.Models.User", "ProfilePictureId");
 
                     b.Navigation("ProfilePicture");
+                });
+
+            modelBuilder.Entity("ChefsFeed_backend.Data.Models.UserGrades", b =>
+                {
+                    b.HasOne("ChefsFeed_backend.Data.Models.Recipe", "Recipe")
+                        .WithMany("UsersGrades")
+                        .HasForeignKey("RecipeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("ChefsFeed_backend.Data.Models.User", "User")
+                        .WithMany("UsersGrades")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Recipe");
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("ChefsFeed_backend.Data.Models.UserSavedRecipe", b =>
@@ -333,6 +436,11 @@ namespace ChefsFeed_backend.Data.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("ChefsFeed_backend.Data.Models.Category", b =>
+                {
+                    b.Navigation("Recipes");
+                });
+
             modelBuilder.Entity("ChefsFeed_backend.Data.Models.Comment", b =>
                 {
                     b.Navigation("Children");
@@ -340,9 +448,9 @@ namespace ChefsFeed_backend.Data.Migrations
 
             modelBuilder.Entity("ChefsFeed_backend.Data.Models.Recipe", b =>
                 {
-                    b.Navigation("Categories");
-
                     b.Navigation("SavedRecepies");
+
+                    b.Navigation("UsersGrades");
                 });
 
             modelBuilder.Entity("ChefsFeed_backend.Data.Models.User", b =>
@@ -350,6 +458,8 @@ namespace ChefsFeed_backend.Data.Migrations
                     b.Navigation("Recipes");
 
                     b.Navigation("SavedRecepies");
+
+                    b.Navigation("UsersGrades");
                 });
 #pragma warning restore 612, 618
         }

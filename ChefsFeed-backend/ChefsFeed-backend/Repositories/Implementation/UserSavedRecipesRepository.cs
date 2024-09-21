@@ -48,8 +48,9 @@ public class UserSavedRecipesRepository : IUserSavedRecipesRepository
                 r => r.Id,
                 (usr, r) => new { usr, r }
             )
-            .Where(joined => joined.usr.UserId == userId &&
-                             joined.r.Categories.Any(c => c.Id == categoryId))
+            .Where(joined => joined.usr.UserId == userId 
+            && joined.r.CategoryId == categoryId
+             )
             .Select(joined => joined.r)
             .Distinct()
             .ToListAsync();

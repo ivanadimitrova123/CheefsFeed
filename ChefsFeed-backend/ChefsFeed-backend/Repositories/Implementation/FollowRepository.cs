@@ -34,7 +34,7 @@ public class FollowRepository : IFollowRepository
         return _context.Users
             .Include(u => u.Following)
             .ThenInclude(f => f.Recipes)
-            .ThenInclude(r => r.Categories) 
+           // .ThenInclude(r => r.Categories) 
             .FirstOrDefault(u => u.Id == userId);
     }
 

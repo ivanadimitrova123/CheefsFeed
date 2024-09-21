@@ -95,7 +95,7 @@ namespace ChefsFeed_backend.Services.Implementation
             });
         }
 
-        public async Task CreateRecipeAsync(Recipe recipe, long id, byte[] photoData, string photoContentType, List<long> selectedCategoryIds)
+        public async Task CreateRecipeAsync(Recipe recipe, long id, byte[] photoData, string photoContentType, long categoryId)
         {
 
             if (photoData != null)
@@ -117,19 +117,16 @@ namespace ChefsFeed_backend.Services.Implementation
                 recipe.User = u;
             }
 
-            foreach (var categoryId in selectedCategoryIds)
+            var category = await _categoryRepository.GetCategoryByIdAsync(categoryId);
+            if (category != null)
             {
-                var category = await _categoryRepository.GetCategoryByIdAsync(categoryId);
-                if (category != null)
-                {
-                    recipe.Categories.Add(category);
-                }
+                recipe.Category = category;
             }
 
             await _recipeRepository.AddRecipeAsync(recipe);
         }
 
-        public async Task UpdateRecipeAsync(long id, Recipe updatedRecipe, byte[] photoData, string photoContentType, List<long> selectedCategoryIds)
+        public async Task UpdateRecipeAsync(long id, Recipe updatedRecipe, byte[] photoData, string photoContentType, long categoryId)
         {
             var recipe = await _recipeRepository.GetRecipeByIdAsync(id);
             if (recipe == null) throw new KeyNotFoundException("Recipe not found");
@@ -156,14 +153,15 @@ namespace ChefsFeed_backend.Services.Implementation
             recipe.Total = updatedRecipe.Total;
             recipe.Yield = updatedRecipe.Yield;
 
-            recipe.Categories.Clear();
-            foreach (var categoryId in selectedCategoryIds)
+            //recipe.Categories.Clear();
+            var category = await _categoryRepository.GetCategoryByIdAsync(categoryId);
+            if (category != null)
             {
-                var category = await _categoryRepository.GetCategoryByIdAsync(categoryId);
-                if (category != null)
-                {
-                    recipe.Categories.Add(category);
-                }
+                recipe.Category = category; 
+            }
+            else
+            {
+                throw new KeyNotFoundException("Category not found");
             }
 
             await _recipeRepository.UpdateRecipeAsync(recipe);

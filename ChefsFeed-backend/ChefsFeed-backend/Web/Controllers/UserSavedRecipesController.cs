@@ -34,10 +34,10 @@ public class UserSavedRecipesController : ControllerBase
         var userId = GetUserId(); 
         var recipes = await _userSavedRecipesService.GetSavedRecipesByCategoryAsync(userId, categoryId, HttpContext);
 
-        if (recipes == null || !recipes.Any())
-        {
-            return NotFound("No saved recipes found for the specified category.");
-        }
+        //if (recipes == null || !recipes.Any())
+        //{
+        //    return NotFound("No saved recipes found for the specified category.");
+        //}
 
         return Ok(recipes);
     }

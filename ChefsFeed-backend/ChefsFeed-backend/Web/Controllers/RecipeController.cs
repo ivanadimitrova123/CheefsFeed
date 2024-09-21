@@ -59,7 +59,7 @@ public class RecipeController : ControllerBase
     }
 
     [HttpPost]
-    public async Task<IActionResult> CreateRecipe([FromForm] Recipe recipe, IFormFile photo, [FromForm] List<long> selectedCategoryIds)
+    public async Task<IActionResult> CreateRecipe([FromForm] Recipe recipe, IFormFile photo, [FromForm] long selectedCategoryIds)
     {
         if (!User.Identity.IsAuthenticated)
         {
@@ -85,7 +85,7 @@ public class RecipeController : ControllerBase
     }
 
     [HttpPut("{id}")]
-    public async Task<IActionResult> EditRecipe(long id, [FromForm] Recipe updatedRecipe, IFormFile? photo, [FromForm] List<long> selectedCategoryIds)
+    public async Task<IActionResult> EditRecipe(long id, [FromForm] Recipe updatedRecipe, IFormFile? photo, [FromForm] long selectedCategoryIds)
     {
         var userId = GetUserIdFromClaims();
 

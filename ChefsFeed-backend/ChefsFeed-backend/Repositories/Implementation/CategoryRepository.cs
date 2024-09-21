@@ -23,4 +23,8 @@ public class CategoryRepository : ICategoryRepository
     {
         return await _context.Category.FindAsync(id);
     }
+    public async Task<IEnumerable<Category>> GetAllCategoriesAsync()
+    {
+        return await _context.Category.ToListAsync();
+    }
 }

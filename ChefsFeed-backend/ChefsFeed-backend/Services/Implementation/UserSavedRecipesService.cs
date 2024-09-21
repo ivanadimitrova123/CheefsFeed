@@ -95,10 +95,49 @@ namespace ChefsFeed_backend.Services.Implementation
             return new OkObjectResult(recipesList);
         }
 
+        /* public async Task<List<dynamic>> GetSavedRecipesByCategoryAsync(long userId, long categoryId, HttpContext httpContext)
+         {
+             var savedRecipes = await _repository.GetSavedRecipesByUserIdAndCategoryIdAsync(userId, categoryId);
+
+             if (savedRecipes == null || !savedRecipes.Any())
+             {
+                 return new List<dynamic>();
+             }
+
+             var requestScheme = httpContext.Request.Scheme;
+             var requestHost = httpContext.Request.Host.ToString();
+
+             var tasks = savedRecipes.Select(async recipe =>
+             {
+                 var user = await _userrepository.GetUserByIdAsync(recipe.UserId);
+
+                 return new
+                 {
+                     UserImage = user != null
+                         ? $"{requestScheme}://{requestHost}/api/image/{user.ProfilePictureId}"
+                         : $"{requestScheme}://{requestHost}/api/image/default-profile.png",
+                     Username = user?.Username ?? "Unknown",
+                     RecipeId = recipe.Id,
+                     RecipeName = recipe.Name,
+                     RecipeImage = recipe.PictureId.HasValue
+                         ? $"{requestScheme}://{requestHost}/api/image/{recipe.PictureId.Value}"
+                         : $"{requestScheme}://{requestHost}/api/image/default-recipe.png",
+                     Rating = recipe.Rating,
+                     CommentCount =  _repository.GetCommentsCountForRecipe(recipe.Id) 
+                 };
+             }).ToList();
+
+             var recipeDetails = await Task.WhenAll(tasks);
+
+             return recipeDetails.ToList<dynamic>();
+         }*/
+
+
         public async Task<List<dynamic>> GetSavedRecipesByCategoryAsync(long userId, long categoryId, HttpContext httpContext)
         {
             var savedRecipes = await _repository.GetSavedRecipesByUserIdAndCategoryIdAsync(userId, categoryId);
 
+            // Return an empty list if no saved recipes are found
             if (savedRecipes == null || !savedRecipes.Any())
             {
                 return new List<dynamic>();
@@ -113,17 +152,24 @@ namespace ChefsFeed_backend.Services.Implementation
 
                 return new
                 {
-                    UserImage = user != null
-                        ? $"{requestScheme}://{requestHost}/api/image/{user.ProfilePictureId}"
-                        : $"{requestScheme}://{requestHost}/api/image/default-profile.png",
-                    Username = user?.Username ?? "Unknown",
-                    RecipeId = recipe.Id,
-                    RecipeName = recipe.Name,
-                    RecipeImage = recipe.PictureId.HasValue
-                        ? $"{requestScheme}://{requestHost}/api/image/{recipe.PictureId.Value}"
-                        : $"{requestScheme}://{requestHost}/api/image/default-recipe.png",
-                    Rating = recipe.Rating,
-                    CommentCount =  _repository.GetCommentsCountForRecipe(recipe.Id) 
+                    recipe = new
+                    {
+                        Id = recipe.Id,
+                        Name = recipe.Name,
+                        PictureId = recipe.PictureId,
+                        RecipeImage = recipe.PictureId.HasValue
+                            ? $"{requestScheme}://{requestHost}/api/image/{recipe.PictureId.Value}"
+                            : $"{requestScheme}://{requestHost}/api/image/default-recipe.png",
+                        Rating = recipe.Rating,
+                        Comments = _repository.GetCommentsCountForRecipe(recipe.Id) 
+                    },
+                    user = new
+                    {
+                        UserImage = user != null
+                            ? $"{requestScheme}://{requestHost}/api/image/{user.ProfilePictureId}"
+                            : $"{requestScheme}://{requestHost}/api/image/default-profile.png",
+                        Username = user?.Username ?? "Unknown"
+                    }
                 };
             }).ToList();
 
@@ -131,6 +177,7 @@ namespace ChefsFeed_backend.Services.Implementation
 
             return recipeDetails.ToList<dynamic>();
         }
+
 
     }
 }

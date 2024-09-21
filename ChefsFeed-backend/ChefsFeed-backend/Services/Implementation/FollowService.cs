@@ -95,7 +95,8 @@ public class FollowService : IFollowService
         if (user == null) return null;
 
         var recipesOfFollowedUsers = user.Following.SelectMany(followedUser => followedUser.Recipes
-            .Where(recipe => recipe.Categories.Any(c => c.Id == categoryId))
+            .Where(recipe => recipe.CategoryId == categoryId)
+            //.Where(recipe => recipe.Categories.Any(c => c.Id == categoryId))
             .Select(recipe => new
             {
                 recipe = new

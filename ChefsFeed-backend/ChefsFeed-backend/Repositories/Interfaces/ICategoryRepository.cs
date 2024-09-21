@@ -6,5 +6,7 @@ namespace ChefsFeed_backend.Repositories.Interfaces
     {
         Task<Category> GetCategoryByIdAsync(long id);
         Task AddCategoryAsync(Category category);
+        Task<IEnumerable<Category>> GetAllCategoriesAsync();
+
     }
 }

@@ -5,8 +5,8 @@ namespace ChefsFeed_backend.Services.Interfaces
 {
     public interface IRecipeService
     {
-        Task UpdateRecipeAsync(long id, Recipe updatedRecipe, byte[] photoData, string photoContentType, List<long> selectedCategoryIds);
-        Task CreateRecipeAsync(Recipe recipe, long id, byte[] photoData, string photoContentType, List<long> selectedCategoryIds);
+        Task UpdateRecipeAsync(long id, Recipe updatedRecipe, byte[] photoData, string photoContentType, long selectedCategoryIds);
+        Task CreateRecipeAsync(Recipe recipe, long id, byte[] photoData, string photoContentType, long selectedCategoryIds);
         Task<IEnumerable<SearchRecipeDto>> SearchRecipesAsync(string text);
         Task<IEnumerable<RecipeDto>> GetRecipesByUserIdAsync(long userId);
         Task<IEnumerable<object>> GetPopularRecipesAsync();

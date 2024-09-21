@@ -28,4 +28,11 @@ public class CategoryController : ControllerBase
             await _categoryService.AddCategoryAsync(category);
             return Ok("Category added successfully.");
     }
+
+    [HttpGet("getAllCategories")]
+    public async Task<IActionResult> GetAllCategories()
+    {
+        var categories = await _categoryService.GetAllCategoriesAsync();
+        return Ok(categories);
+    }
 }
