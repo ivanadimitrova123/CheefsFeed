@@ -986,7 +986,7 @@ div#root {
   padding-right: 20px;
 }
 
-.final {
+.total {
   display: inline-flex;
   flex-direction: row;
   flex-wrap: nowrap;
@@ -994,6 +994,8 @@ div#root {
   align-items: center;
   justify-content: flex-start;
   gap: 15px;
+  border-right: 1px solid rgba(0, 0, 0, 0.375);
+  padding-right: 20px;
 }
 
 .actionShareBtn {
@@ -1038,6 +1040,15 @@ div#root {
   padding-right: 20px;
 }
 
+.category{
+  display: inline-flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  align-content: center;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 15px;
+}
 .detailsMins {
   display: flex;
   justify-content: flex-start;

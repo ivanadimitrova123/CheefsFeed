@@ -21,9 +21,30 @@ function RecipeForm() {
     cook: "",
     total: "",
     yield: "",
+    categoryId: "",
   });
 
+  const [categories, setCategories] = useState([]);
+  const [selectedCategory, setSelectedCategory] = useState("");
   const [photo, setPhoto] = useState(null);
+
+  // Fetch categories
+  useEffect(() => {
+    const fetchCategories = async () => {
+      try {
+        const response = await axios.get("/category/getAllCategories", {
+          headers: {
+            Authorization: `Bearer ${userInfo.token}`,
+          },
+        });
+        setCategories(response.data);
+      } catch (error) {
+        console.error("Error fetching categories:", error);
+      }
+    };
+
+    fetchCategories();
+  }, [userInfo]);
 
   useEffect(() => {
     if (id) {
@@ -35,9 +56,10 @@ function RecipeForm() {
         })
         .then((response) => {
           const fetchedRecipe = response.data;
-
           fetchedRecipe.ingredients = fetchedRecipe.ingredients.join("\n");
           setRecipe(fetchedRecipe);
+          setSelectedCategory(fetchedRecipe.categoryId || "");
+
           setPhoto(
             `data:${fetchedRecipe.picture.contentType};base64,${fetchedRecipe.picture.imageData}`
           );
@@ -54,6 +76,10 @@ function RecipeForm() {
       ...recipe,
       [name]: value,
     });
+  };
+
+  const handleCategoryChange = (e) => {
+    setSelectedCategory(e.target.value);
   };
 
   const handleFileChange = (e) => {
@@ -82,7 +108,8 @@ function RecipeForm() {
     formData.append("total", parseInt(recipe.cook || 0) + parseInt(recipe.prep || 0));
     formData.append("yield", recipe.yield);
     formData.append("photo", photo);
-
+    formData.append("categoryId", selectedCategory);
+    console.log(selectedCategory);
     try {
       if (id) {
         await axios.put(
@@ -128,9 +155,7 @@ function RecipeForm() {
             className="recipePhotoCover d-flex flex-column align-items-center justify-content-center"
             style={{
               height: "100%",
-              backgroundImage: `url(${
-                (recipe.picture && recipe.picture.fileName) || ""
-              })`,
+              backgroundImage: `url(${photo || ""})`,
               backgroundSize: "cover",
               backgroundPosition: "center",
             }}
@@ -156,7 +181,25 @@ function RecipeForm() {
         <h3 className="mt-4 mb-4">{id ? "Edit Recipe" : "Create Recipe"}</h3>
         <form className="recipeDetailsForm">
           <div className="row">
-            <div className="col-md-6">
+            <div className="col-4">
+              <div className="form-group">
+                <label htmlFor="category" className="form-label fw-bold">Category:</label>
+                <select
+                  className="form-select"
+                  name="category"
+                  value={selectedCategory}
+                  onChange={handleCategoryChange}
+                >
+                  <option value="">Select Category</option>
+                  {categories.map((category) => (
+                    <option key={category.id} value={category.id}>
+                      {category.name}
+                    </option>
+                  ))}
+                </select>
+              </div>
+            </div>
+            <div className="col-4">
                 <div className="form-group">
                     <label htmlFor="form-select" className="form-label fw-bold">Level:</label>
                     <select
@@ -172,7 +215,7 @@ function RecipeForm() {
                     </select>
                 </div>
             </div>
-            <div className="col-md-6">
+            <div className="col-4">
                 <div className="form-group">
                 <label htmlFor="yield" className="form-label  fw-bold">Yield:</label>
                 <input

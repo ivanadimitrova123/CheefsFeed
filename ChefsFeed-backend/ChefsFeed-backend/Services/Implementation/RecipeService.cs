@@ -74,6 +74,7 @@ namespace ChefsFeed_backend.Services.Implementation
                 Ingredients = recipe.Ingredients,
                 UserId= recipe.UserId,
                 User = recipe.User,
+                CategoryId = recipe.CategoryId,
                 Level = recipe.Level,
                 Cook = recipe.Cook,
                 Prep = recipe.Prep,

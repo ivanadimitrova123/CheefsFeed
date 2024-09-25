@@ -24,7 +24,6 @@ const RecipeDetails = () => {
   const [recipe, setRecipe] = useState(null);
   const [recipeUserImage, setRecipeUserImage] = useState("");
   const [recipeGrade, setRecipeGrade] = useState("");
-  //const [reviews, setReviews] = useState("");
   const [rerender, setRerender] = useState(false);
   const [commentText, setCommentText] = useState("");
   const [comments, setComments] = useState([]);
@@ -32,10 +31,26 @@ const RecipeDetails = () => {
   const [reportIsLoading, setReportIsLoading] = useState(false);
   const [saveIsLoading, setSaveIsLoading] = useState(false);
   const [deleteIsLoading, setDeleteIsLoading] = useState(false);
-  //const [gradeIsLoading, setGradeIsLoading] = useState(false);
   const [addCommentLoading, setAddCommentLoading] = useState(false);
-  //const [deleteCommentLoading, setDeleteCommentLoading] = useState(false);
+  const [categoryMap, setCategoryMap] = useState({});
   const baseUrl = window.location.origin;
+
+  useEffect(() => {
+    const headers = getHeaders(userInfo.token, false);
+    axios
+      .get(`category/getAllCategories`, { headers }) 
+      .then((response) => {
+        const categoryData = response.data;
+        const map = {};
+        categoryData.forEach(category => {
+          map[category.id] = category.name; 
+        });
+        setCategoryMap(map);
+      })
+      .catch((error) => {
+        console.error("Error fetching categories:", error);
+      });
+  }, [userInfo]);
 
   useEffect(() => {
     const headers = getHeaders(userInfo.token, false);
@@ -306,7 +321,7 @@ const RecipeDetails = () => {
                     </div>
                   </div>
 
-                  <div className="final">
+                  <div className="total">
                     <img
                       src={flag}
                       style={{ width: "20px", height: "20px" }}
@@ -319,6 +334,17 @@ const RecipeDetails = () => {
                       <small>{recipe.total} Minutes</small>
                     </div>
                   </div>
+
+                  <div className="category">
+                    <img src={forknknife} alt="fork and knife"></img>
+                    <div className="usernameFlex">
+                      <p className="recipe-by">
+                        <b>CATEGORY</b>
+                      </p>
+                      <small>{categoryMap[recipe.categoryId] || "Unknown Category"}</small>
+                    </div>
+                  </div>
+
                 </div>
               </div>
             </div>
@@ -519,7 +545,7 @@ const RecipeDetails = () => {
               </>
             )}
 
-            <RecomendedRecipes recipes={popularRecipes.slice(0,3)} />
+            <RecomendedRecipes recipes={popularRecipes.slice(0,4)} />
           </div>
         ) : (
           <p className="loading-message mt-4">Loading recipe details...</p>

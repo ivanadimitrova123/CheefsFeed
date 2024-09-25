@@ -50,7 +50,7 @@ const Navbar = () => {
   return (
     <nav className="navbar navbar-expand-lg navbar-light sticky-top">
       <div className="container-fluid">
-        <Link className="navbar-brand" to="/">
+        <Link className="navbar-brand" to="/feed">
           <img src={ChefsFeedImage} alt="Logo" height="30" />
         </Link>
         {userInfo && (
@@ -131,6 +131,11 @@ const Navbar = () => {
                   )}
                 </div>
 
+                <li className="nav-item me-2">
+                  <Link to="/feed" className="nav-link">
+                    Feed
+                  </Link>
+                </li>
                 <li className="nav-item">
                   <Link to="/savedRecipes" className="nav-link">
                     Saved Recipes
@@ -142,8 +147,8 @@ const Navbar = () => {
                   </Link>
                 </li>
                 <li className="nav-item me-2">
-                  <Link to="/feed" className="nav-link">
-                    Feed
+                  <Link to="/recipeForm" className="nav-link">
+                    Add Recipe
                   </Link>
                 </li>
                 <li className="nav-item">

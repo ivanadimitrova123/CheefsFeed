@@ -28,6 +28,7 @@ namespace ChefsFeed_backend.Repositories.Implementation
             return await _context.Recipes
                 .Include(r => r.Picture)
                 .Include(r => r.User)
+                .Include(r => r.Category)
                 .FirstOrDefaultAsync(r => r.Id == id);
         }
 

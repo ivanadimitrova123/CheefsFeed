@@ -59,7 +59,7 @@ public class RecipeController : ControllerBase
     }
 
     [HttpPost]
-    public async Task<IActionResult> CreateRecipe([FromForm] Recipe recipe, IFormFile photo, [FromForm] long selectedCategoryIds)
+    public async Task<IActionResult> CreateRecipe([FromForm] Recipe recipe, IFormFile photo, [FromForm] long categoryId)
     {
         if (!User.Identity.IsAuthenticated)
         {
@@ -80,12 +80,12 @@ public class RecipeController : ControllerBase
             }
         }
 
-        await _recipeService.CreateRecipeAsync(recipe, userId, photoData, photoContentType, selectedCategoryIds);
+        await _recipeService.CreateRecipeAsync(recipe, userId, photoData, photoContentType, categoryId);
         return Ok();
     }
 
     [HttpPut("{id}")]
-    public async Task<IActionResult> EditRecipe(long id, [FromForm] Recipe updatedRecipe, IFormFile? photo, [FromForm] long selectedCategoryIds)
+    public async Task<IActionResult> EditRecipe(long id, [FromForm] Recipe updatedRecipe, IFormFile? photo, [FromForm] long categoryId)
     {
         var userId = GetUserIdFromClaims();
 
@@ -116,7 +116,7 @@ public class RecipeController : ControllerBase
 
         try
         {
-            await _recipeService.UpdateRecipeAsync(id, updatedRecipe, photoData, photoContentType, selectedCategoryIds);
+            await _recipeService.UpdateRecipeAsync(id, updatedRecipe, photoData, photoContentType, categoryId);
             return Ok();
         }
         catch (KeyNotFoundException)
