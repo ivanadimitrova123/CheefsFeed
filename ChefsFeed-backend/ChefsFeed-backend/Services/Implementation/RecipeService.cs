@@ -44,6 +44,38 @@ namespace ChefsFeed_backend.Services.Implementation
 
             return editedRecipes;
         }
+
+        public async Task<IEnumerable<object>> GetRecommendedRecipesAsync(long recipeId)
+        {
+            var recipe = await _recipeRepository.GetRecipeByIdAsync(recipeId);
+
+            if (recipe == null || recipe.CategoryId == null)
+            {
+                return new List<object>();
+            }
+
+            var recommendedRecipes = await _recipeRepository.GetRecipesByCategoryAsync((long)recipe.CategoryId, recipeId);
+            var editedRecipes = new List<object>();
+
+            foreach (var rec in recommendedRecipes)
+            {
+                string imgUrl = $"{_httpContextAccessor.HttpContext.Request.Scheme}://{_httpContextAccessor.HttpContext.Request.Host}/api/image/{rec.PictureId}";
+
+                editedRecipes.Add(new
+                {
+                    rec.Id,
+                    rec.Name,
+                    img = imgUrl,
+                    rec.Total,
+                    rec.Level,
+                    Username = rec.User?.Username
+                });
+            }
+
+            return editedRecipes;
+        }
+
+
         public async Task<IEnumerable<RecipeDto>> GetRecipesByUserIdAsync(long userId)
         {
             var recipes = await _recipeRepository.GetRecipesByUserIdAsync(userId);

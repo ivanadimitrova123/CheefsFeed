@@ -4,5 +4,6 @@ public interface IReportedRecipeService
     Task<string> ReportRecipeAsync(long userId, long recipeId);
     Task<string> DeleteReportedRecipeAsync(long recipeId);
     Task<IEnumerable<object>> GetReportedRecipesAsync();
-    
+    Task<bool> AllowReportedRecipeAsync(int commentId);
+
 }

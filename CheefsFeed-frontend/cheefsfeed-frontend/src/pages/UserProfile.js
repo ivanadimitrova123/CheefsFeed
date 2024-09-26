@@ -76,7 +76,7 @@ function UserProfile() {
   };
 
   return (
-    <div className="heightMore">
+    <div className="">
       <div className="container-fluid customBackground">
         <Navbar />
         <div className="container pt-5 userProfileContainer">

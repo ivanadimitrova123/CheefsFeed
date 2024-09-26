@@ -66,6 +66,19 @@ public class ReportedRecipeService : IReportedRecipeService
         return "Recipe Reported";
     }
 
+    public async Task<bool> AllowReportedRecipeAsync(int recipeId)
+    {
+        var comment = await _recipeRepository.GetRecipeByIdAsync(recipeId);
+        if (comment == null)
+        {
+            return false;
+        }
+
+        await _reportedRecipeRepository.RemoveReportedRecipeAsync(recipeId);
+
+        return true;
+    }
+
     public async Task<string> DeleteReportedRecipeAsync(long recipeId)
     {
         var reportedRecipe = _reportedRecipeRepository.GetReportedRecipesByRecipeIdAsync(recipeId);

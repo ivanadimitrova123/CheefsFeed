@@ -10,6 +10,7 @@ namespace ChefsFeed_backend.Services.Interfaces
         Task<IEnumerable<SearchRecipeDto>> SearchRecipesAsync(string text);
         Task<IEnumerable<RecipeDto>> GetRecipesByUserIdAsync(long userId);
         Task<IEnumerable<object>> GetPopularRecipesAsync();
+        Task<IEnumerable<object>> GetRecommendedRecipesAsync(long recipeId);
         Task<Recipe> GetRecipeByIdAsync(long id);
         Task DeleteRecipeAsync(long id);
         

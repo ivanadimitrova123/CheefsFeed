@@ -53,20 +53,25 @@ const SavedRecipes = () => {
     setIsLoading(true);
     const headers = getHeaders(userInfo.token, false);
     setErrorMessage(''); 
-
-    try {
-      const response = await axios.get(`saverecipe/recipeByCategory?categoryId=${categoryId}`, { headers });
+    if (categoryId === 'all') {
+      const response = await axios.get(`saverecipe?userId=${userInfo.user.id}`, { headers });
       setRecipes(response.data);
-      setSelectedCategory(categoryId); 
+      setSelectedCategory(null); 
+    } else {
+      try {
+        const response = await axios.get(`saverecipe/recipeByCategory?categoryId=${categoryId}`, { headers });
+        setRecipes(response.data);
+        setSelectedCategory(categoryId); 
 
-      if (response.data.length === 0) {
-        setErrorMessage("No recipes to show for this category.");
+        if (response.data.length === 0) {
+          setErrorMessage("No recipes to show for this category.");
+        }
+      } catch (error) {
+        console.error("Error fetching recipes by category:", error);
       }
-    } catch (error) {
-      console.error("Error fetching recipes by category:", error);
-    } finally {
-      setIsLoading(false);
     }
+
+    setIsLoading(false);
   };
 
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -100,24 +105,19 @@ const SavedRecipes = () => {
       <Navbar />
       <div className="row mb-3">
         <div className="col">
-          <h3 className="mainHeader">Categories</h3>
-          {/* <ul className="list-group">
-            {categories.map((category) => (
-              <li
-                key={category.id}
-                className={`list-group-item ${selectedCategory === category.id ? 'active' : ''}`}
-                onClick={() => handleCategoryClick(category.id)}
-                style={{ cursor: "pointer" }}
-              >
-                {category.name}
-              </li>
-            ))}
-          </ul> */}
-          <div className="categoryNav">
+          <div className="categoryNav my-5">
             <button className="arrowButton" onClick={handlePrevious}>
               <svg className="rotated" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path d="M8.122 24l-4.122-4 8-8-8-8 4.122-4 11.878 12z" /></svg>
             </button>
             <div className="categoryItems" ref={categoryItemsRef}>
+            <button
+                key="all"
+                className={`list-group-item ${selectedCategory === null ? 'active' : ''}`}
+                onClick={() => handleCategoryClick('all')}
+                style={{ cursor: "pointer" }}
+              >
+                All
+              </button>
               {categories.map((category) => (
                 <button
                   key={category.id}
@@ -137,9 +137,7 @@ const SavedRecipes = () => {
       </div>
       <div className="row mb-3">
         <div className="col" style={{ display: "flex", alignItems: "center" }}>
-          <h2 className="mainHeader" style={{ width: "100%", textAlign: "center" }}>
-            {selectedCategory ? `Recipes for Category` : `Saved Recipes`}
-          </h2>
+          
         </div>
       </div>
       {isLoading && (

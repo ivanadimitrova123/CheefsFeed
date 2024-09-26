@@ -1,4 +1,5 @@
-﻿using ChefsFeed_backend.Services.Interfaces;
+﻿using ChefsFeed_backend.Services.Implementation;
+using ChefsFeed_backend.Services.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -52,6 +53,18 @@ public class ReportedCommentController : ControllerBase
     {
         var result = await _reportedCommentService.ReportCommentAsync(userId, commentId);
         return Ok(result);
+    }
+
+    [HttpDelete("{commentId}")]
+    public async Task<IActionResult> AllowReportedComment(int commentId)
+    {
+        var result = await _reportedCommentService.AllowReportedCommentAsync(commentId);
+        if (!result)
+        {
+            return BadRequest("Comment does not exist");
+        }
+
+        return Ok();
     }
 
     [Authorize(Roles = "Admin")]

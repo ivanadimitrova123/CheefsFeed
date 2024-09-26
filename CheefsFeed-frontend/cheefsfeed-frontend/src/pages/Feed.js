@@ -4,7 +4,6 @@ import Navbar from "../components/navbar";
 import { Store } from "../Store";
 import FeedItem from "../components/FeedItem";
 import { getHeaders } from "../utils";
-
 const Feed = () => {
   const { state } = useContext(Store);
   const { userInfo } = state;
@@ -48,17 +47,23 @@ const Feed = () => {
 
   const handleCategoryClick = async (categoryId) => {
     setIsLoading(true);
-    const headers = getHeaders(userInfo.token, false);
 
+    const headers = getHeaders(userInfo.token, false);
+    if (categoryId === 'all') {
+      const response = await axios.get(`follow/recipes`, { headers });
+      setRecipes(response.data);
+      setSelectedCategory(null); 
+    }else{
     try {
       const response = await axios.get(`follow/recipeByCategory?categoryId=${categoryId}`, { headers });
       setRecipes(response.data);
       setSelectedCategory(categoryId);
     } catch (error) {
       console.error("Error fetching recipes by category:", error);
-    } finally {
+    } 
+  }
       setIsLoading(false);
-    }
+    
   };
 
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -94,12 +99,18 @@ const Feed = () => {
       {/* Display categories after the Navbar */}
       <div className="row mb-3">
         <div className="col">
-          <h3>Categories</h3>
-          <div className="categoryNav">
+          <div className="categoryNav my-5 ">
             <button className="arrowButton" onClick={handlePrevious}>
               <svg className="rotated" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path d="M8.122 24l-4.122-4 8-8-8-8 4.122-4 11.878 12z" /></svg>
             </button>
             <div className="categoryItems" ref={categoryItemsRef}>
+            <button 
+              className={`list-group-item ${selectedCategory === "all" ? 'active' : ''}`} 
+              onClick={() => handleCategoryClick("all")} 
+              style={{ cursor: "pointer" }}
+            >
+              All
+            </button>
               {categories.map((category) => (
                 <button
                   key={category.id}
@@ -119,12 +130,7 @@ const Feed = () => {
       </div>
       <div className="row mb-3">
         <div className="col" style={{ display: "flex", alignItems: "center" }}>
-          <h2
-            className="mainHeader"
-            style={{ width: "100%", textAlign: "center" }}
-          >
-            {selectedCategory ? `Recipes for Category` : `Recipes Feed`}
-          </h2>
+          
         </div>
       </div>
 

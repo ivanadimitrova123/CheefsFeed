@@ -28,6 +28,7 @@ const RecipeDetails = () => {
   const [commentText, setCommentText] = useState("");
   const [comments, setComments] = useState([]);
   const [popularRecipes, setPopularRecipes] = useState("");
+  const [recommendedRecipes, setRecommendedRecipes] = useState([]); 
   const [reportIsLoading, setReportIsLoading] = useState(false);
   const [saveIsLoading, setSaveIsLoading] = useState(false);
   const [deleteIsLoading, setDeleteIsLoading] = useState(false);
@@ -50,7 +51,25 @@ const RecipeDetails = () => {
       .catch((error) => {
         console.error("Error fetching categories:", error);
       });
-  }, [userInfo]);
+
+      axios
+      .get(`recipes/recommended/${id}`, { headers }) 
+      .then((response) => {
+        setRecommendedRecipes(response.data);
+      })
+      .catch((error) => {
+        console.error("Error fetching recommended recipes:", error);
+      });
+
+    const getCurrentDate = () => {
+      const date = new Date();
+      const options = { year: "numeric", month: "long", day: "numeric" };
+      return date.toLocaleDateString("en-US", options);
+    };
+
+    setCurrentDate(getCurrentDate());
+
+  }, [userInfo, id, baseUrl]);
 
   useEffect(() => {
     const headers = getHeaders(userInfo.token, false);
@@ -545,7 +564,7 @@ const RecipeDetails = () => {
               </>
             )}
 
-            <RecomendedRecipes recipes={popularRecipes.slice(0,4)} />
+            <RecomendedRecipes recipes={recommendedRecipes.slice(0,4)} />
           </div>
         ) : (
           <p className="loading-message mt-4">Loading recipe details...</p>

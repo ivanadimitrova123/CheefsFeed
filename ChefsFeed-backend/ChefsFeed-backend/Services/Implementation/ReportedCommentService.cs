@@ -49,6 +49,20 @@ public class ReportedCommentService : IReportedCommentService
         return "Comment Reported";
     }
 
+    public async Task<bool> AllowReportedCommentAsync(int commentId)
+    {
+        var comment = await _commentRepository.GetCommentByIdAsync(commentId);
+        if (comment == null)
+        {
+            return false;
+        }
+
+        await _reportedCommentRepository.RemoveReportedCommentAsync(commentId);
+
+        return true;
+    }
+
+
     public async Task<string> DeleteReportedCommentAsync(int commentId)
     {
         var reportedComment = await _reportedCommentRepository.GetReportedCommentsByCommentIdAsync(commentId);

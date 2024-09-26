@@ -32,6 +32,19 @@ public class RecipeController : ControllerBase
         return Ok(recipes);
     }
 
+    [HttpGet("recommended/{recipeId}")]
+    public async Task<IActionResult> GetRecommendedRecipes(long recipeId)
+    {
+        var recommendedRecipes = await _recipeService.GetRecommendedRecipesAsync(recipeId);
+
+        if (!recommendedRecipes.Any())
+        {
+            return NotFound("No recommended recipes found.");
+        }
+
+        return Ok(recommendedRecipes);
+    }
+
     [HttpGet]
     public async Task<IActionResult> GetRecipes()
     {

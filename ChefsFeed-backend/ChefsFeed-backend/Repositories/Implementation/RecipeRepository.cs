@@ -15,14 +15,27 @@ namespace ChefsFeed_backend.Repositories.Implementation
 
         public async Task<IEnumerable<Recipe>> GetPopularRecipesAsync()
         {
-            return await _context.Recipes.Include(r => r.User).Take(7).ToListAsync();
+            return await _context.Recipes
+                .Include(r => r.User)
+                .OrderByDescending(r => _context.Comments.Count(c => c.RecipeId == r.Id))  
+                .Take(7)  
+                .ToListAsync();
         }
+
 
         public async Task<IEnumerable<Recipe>> GetRecipesByUserIdAsync(long userId)
         {
             return await _context.Recipes.Where(r => r.UserId == userId).ToListAsync();
         }
-        
+
+        public async Task<IEnumerable<Recipe>> GetRecipesByCategoryAsync(long categoryId, long excludeRecipeId)
+        {
+            return await _context.Recipes
+                .Where(r => r.CategoryId == categoryId && r.Id != excludeRecipeId)
+                .ToListAsync();
+        }
+
+
         public async Task<Recipe> GetRecipeByIdAsync(long id)
         {
             return await _context.Recipes

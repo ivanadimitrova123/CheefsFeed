@@ -5,6 +5,7 @@ import axios from "../axios/axios";
 import { useNavigate } from "react-router-dom";
 import { Spinner } from "react-bootstrap";
 import { getHeaders } from "../utils";
+
 const Dashboard = () => {
   const navigate = useNavigate();
   const { state } = useContext(Store);
@@ -17,6 +18,8 @@ const Dashboard = () => {
   const [commentDeleteLoading, setCommentDeleteLoading] = useState(false);
   const [recipeDeleteLoading, setRecipeDeleteLoading] = useState(false);
   const [recipeRefresh, setRecipeRefresh] = useState(false);
+  const [commentAllowLoading, setCommentAllowLoading] = useState(false);
+  const [recipeAllowLoading, setRecipeAllowLoading] = useState(false);
 
   const deleteHandler = async (id) => {
     const headers = getHeaders(userInfo.token, false);
@@ -39,8 +42,34 @@ const Dashboard = () => {
       setRecipeDeleteLoading(false);
       setRecipeRefresh(true);
     } catch (error) {
-        setRecipeDeleteLoading(false);
+      setRecipeDeleteLoading(false);
       console.error("Error deleting recipe:", error);
+    }
+  };
+
+  const allowComment = async (id) => {
+    const headers = getHeaders(userInfo.token, false);
+    setCommentAllowLoading(true);
+    try {
+      await axios.delete(`/reportcomment/${id}`, {}, { headers });
+      setCommentAllowLoading(false);
+      setCommentRefesh(true);
+    } catch (error) {
+      setCommentAllowLoading(false);
+      console.error("Error allowing comment:", error);
+    }
+  };
+
+  const allowRecipe = async (id) => {
+    const headers = getHeaders(userInfo.token, false);
+    setRecipeAllowLoading(true);
+    try {
+      await axios.delete(`/reportedrecipe/${id}`, {}, { headers });
+      setRecipeAllowLoading(false);
+      setRecipeRefresh(true);
+    } catch (error) {
+      setRecipeAllowLoading(false);
+      console.error("Error allowing recipe:", error);
     }
   };
 
@@ -132,7 +161,7 @@ const Dashboard = () => {
                   <button
                     className="me-2 btn btn-primary"
                     onClick={() => navigate(`/recipeDetails/${c.comment.recipeId}`)}
-                    >
+                  >
                     View
                   </button>
                   <button
@@ -143,6 +172,16 @@ const Dashboard = () => {
                       <Spinner style={{ width: "1rem", height: "1rem" }} />
                     ) : (
                       "Delete"
+                    )}
+                  </button>
+                  <button
+                    className="me-2 btn btn-success"
+                    onClick={() => allowComment(c.commentId)}
+                  >
+                    {commentAllowLoading ? (
+                      <Spinner style={{ width: "1rem", height: "1rem" }} />
+                    ) : (
+                      "Allow"
                     )}
                   </button>
                 </div>
@@ -196,6 +235,16 @@ const Dashboard = () => {
                       <Spinner style={{ width: "1rem", height: "1rem" }} />
                     ) : (
                       "Delete"
+                    )}
+                  </button>
+                  <button
+                    className="me-2 btn btn-success"
+                    onClick={() => allowRecipe(r.recipeId)}
+                  >
+                    {recipeAllowLoading ? (
+                      <Spinner style={{ width: "1rem", height: "1rem" }} />
+                    ) : (
+                      "Allow"
                     )}
                   </button>
                 </div>
