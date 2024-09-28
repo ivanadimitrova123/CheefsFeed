@@ -4,6 +4,7 @@ import Navbar from "../components/navbar";
 import { Store } from "../Store";
 import FeedItem from "../components/FeedItem";
 import { getHeaders } from "../utils";
+
 const Feed = () => {
   const { state } = useContext(Store);
   const { userInfo } = state;
@@ -11,6 +12,8 @@ const Feed = () => {
   const [categories, setCategories] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState(null);
+  const [currentIndex, setCurrentIndex] = useState(0);
+  const categoryItemsRef = useRef(null);
 
   useEffect(() => {
     const fetchRecipes = async () => {
@@ -36,7 +39,7 @@ const Feed = () => {
     const fetchCategories = async () => {
       try {
         const response = await axios.get("category/getAllCategories");
-        setCategories(response.data);
+        setCategories([{ id: "all", name: "All" }, ...response.data]);
       } catch (error) {
         console.error("Error fetching categories:", error);
       }
@@ -49,30 +52,33 @@ const Feed = () => {
     setIsLoading(true);
 
     const headers = getHeaders(userInfo.token, false);
-    if (categoryId === 'all') {
-      const response = await axios.get(`follow/recipes`, { headers });
-      setRecipes(response.data);
-      setSelectedCategory(null); 
-    }else{
     try {
-      const response = await axios.get(`follow/recipeByCategory?categoryId=${categoryId}`, { headers });
-      setRecipes(response.data);
-      setSelectedCategory(categoryId);
+      if (categoryId === "all") {
+        const response = await axios.get(`follow/recipes`, { headers });
+        setRecipes(response.data);
+        setSelectedCategory(null);
+      } else {
+        const response = await axios.get(
+          `follow/recipeByCategory?categoryId=${categoryId}`,
+          { headers }
+        );
+        setRecipes(response.data);
+        setSelectedCategory(categoryId);
+      }
     } catch (error) {
       console.error("Error fetching recipes by category:", error);
-    } 
-  }
+    } finally {
       setIsLoading(false);
-    
+    }
   };
 
-  const [currentIndex, setCurrentIndex] = useState(0);
-  const categoryItemsRef = useRef(null);
   const scrollToCategory = (index) => {
     const categoryButtons = categoryItemsRef.current?.children;
     if (categoryButtons && categoryButtons[index]) {
-      categoryButtons[index].scrollIntoView({ behavior: "smooth", inline: "center" });
-      handleCategoryClick(categories[index].id);
+      categoryButtons[index].scrollIntoView({
+        behavior: "smooth",
+        inline: "center",
+      });
     }
   };
 
@@ -80,6 +86,9 @@ const Feed = () => {
     if (currentIndex < categories.length - 1) {
       const newIndex = currentIndex + 1;
       setCurrentIndex(newIndex);
+      const nextCategory = categories[newIndex].id;
+      setSelectedCategory(nextCategory);
+      handleCategoryClick(nextCategory);
       scrollToCategory(newIndex);
     }
   };
@@ -88,8 +97,17 @@ const Feed = () => {
     if (currentIndex > 0) {
       const newIndex = currentIndex - 1;
       setCurrentIndex(newIndex);
+      const prevCategory = categories[newIndex].id;
+      setSelectedCategory(prevCategory);
+      handleCategoryClick(prevCategory);
       scrollToCategory(newIndex);
     }
+  };
+
+  const handleCategoryItemClick = (categoryId, index) => {
+    setCurrentIndex(index);
+    setSelectedCategory(categoryId);
+    handleCategoryClick(categoryId);
   };
 
   return (
@@ -99,23 +117,26 @@ const Feed = () => {
       {/* Display categories after the Navbar */}
       <div className="row mb-3">
         <div className="col">
-          <div className="categoryNav my-5 ">
+          <div className="categoryNav my-5">
             <button className="arrowButton" onClick={handlePrevious}>
-              <svg className="rotated" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path d="M8.122 24l-4.122-4 8-8-8-8 4.122-4 11.878 12z" /></svg>
+              <svg
+                className="rotated"
+                xmlns="http://www.w3.org/2000/svg"
+                width="24"
+                height="24"
+                viewBox="0 0 24 24"
+              >
+                <path d="M8.122 24l-4.122-4 8-8-8-8 4.122-4 11.878 12z" />
+              </svg>
             </button>
             <div className="categoryItems" ref={categoryItemsRef}>
-            <button 
-              className={`list-group-item ${selectedCategory === "all" ? 'active' : ''}`} 
-              onClick={() => handleCategoryClick("all")} 
-              style={{ cursor: "pointer" }}
-            >
-              All
-            </button>
-              {categories.map((category) => (
+              {categories.map((category, index) => (
                 <button
                   key={category.id}
-                  className={`list-group-item ${selectedCategory === category.id ? 'active' : ''}`}
-                  onClick={() => handleCategoryClick(category.id)}
+                  className={`list-group-item ${
+                    selectedCategory === category.id ? "active" : ""
+                  }`}
+                  onClick={() => handleCategoryItemClick(category.id, index)}
                   style={{ cursor: "pointer" }}
                 >
                   {category.name}
@@ -123,14 +144,16 @@ const Feed = () => {
               ))}
             </div>
             <button className="arrowButton" onClick={handleNext}>
-              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path d="M8.122 24l-4.122-4 8-8-8-8 4.122-4 11.878 12z" /></svg>
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="24"
+                height="24"
+                viewBox="0 0 24 24"
+              >
+                <path d="M8.122 24l-4.122-4 8-8-8-8 4.122-4 11.878 12z" />
+              </svg>
             </button>
           </div>
-        </div>
-      </div>
-      <div className="row mb-3">
-        <div className="col" style={{ display: "flex", alignItems: "center" }}>
-          
         </div>
       </div>
 

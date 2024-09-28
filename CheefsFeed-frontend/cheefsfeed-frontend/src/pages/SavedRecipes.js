@@ -76,11 +76,11 @@ const SavedRecipes = () => {
 
   const [currentIndex, setCurrentIndex] = useState(0);
   const categoryItemsRef = useRef(null);
+
   const scrollToCategory = (index) => {
     const categoryButtons = categoryItemsRef.current?.children;
     if (categoryButtons && categoryButtons[index]) {
       categoryButtons[index].scrollIntoView({ behavior: "smooth", inline: "center" });
-      handleCategoryClick(categories[index].id);
     }
   };
 
@@ -89,6 +89,7 @@ const SavedRecipes = () => {
       const newIndex = currentIndex + 1;
       setCurrentIndex(newIndex);
       scrollToCategory(newIndex);
+      handleCategoryClick(categories[newIndex].id);
     }
   };
 
@@ -97,6 +98,7 @@ const SavedRecipes = () => {
       const newIndex = currentIndex - 1;
       setCurrentIndex(newIndex);
       scrollToCategory(newIndex);
+      handleCategoryClick(categories[newIndex].id);
     }
   };
 
@@ -110,7 +112,7 @@ const SavedRecipes = () => {
               <svg className="rotated" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path d="M8.122 24l-4.122-4 8-8-8-8 4.122-4 11.878 12z" /></svg>
             </button>
             <div className="categoryItems" ref={categoryItemsRef}>
-            <button
+              <button
                 key="all"
                 className={`list-group-item ${selectedCategory === null ? 'active' : ''}`}
                 onClick={() => handleCategoryClick('all')}
@@ -118,11 +120,14 @@ const SavedRecipes = () => {
               >
                 All
               </button>
-              {categories.map((category) => (
+              {categories.map((category, index) => (
                 <button
                   key={category.id}
                   className={`list-group-item ${selectedCategory === category.id ? 'active' : ''}`}
-                  onClick={() => handleCategoryClick(category.id)}
+                  onClick={() => {
+                    setCurrentIndex(index);
+                    handleCategoryClick(category.id);
+                  }}
                   style={{ cursor: "pointer" }}
                 >
                   {category.name}
@@ -133,11 +138,6 @@ const SavedRecipes = () => {
               <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path d="M8.122 24l-4.122-4 8-8-8-8 4.122-4 11.878 12z" /></svg>
             </button>
           </div>
-        </div>
-      </div>
-      <div className="row mb-3">
-        <div className="col" style={{ display: "flex", alignItems: "center" }}>
-          
         </div>
       </div>
       {isLoading && (
