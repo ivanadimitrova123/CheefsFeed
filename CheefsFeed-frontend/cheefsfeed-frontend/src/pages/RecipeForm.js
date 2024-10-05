@@ -181,7 +181,7 @@ function RecipeForm() {
         <h3 className="mt-4 mb-4">{id ? "Edit Recipe" : "Create Recipe"}</h3>
         <form className="recipeDetailsForm">
           <div className="row">
-            <div className="col-4">
+            <div className="col-12 col-sm-4 ">
               <div className="form-group">
                 <label htmlFor="category" className="form-label fw-bold">Category:</label>
                 <select
@@ -199,7 +199,7 @@ function RecipeForm() {
                 </select>
               </div>
             </div>
-            <div className="col-4">
+            <div className="col-12 col-sm-4 ">
                 <div className="form-group">
                     <label htmlFor="form-select" className="form-label fw-bold">Level:</label>
                     <select
@@ -215,7 +215,7 @@ function RecipeForm() {
                     </select>
                 </div>
             </div>
-            <div className="col-4">
+            <div className="col-12 col-sm-4 ">
                 <div className="form-group">
                 <label htmlFor="yield" className="form-label  fw-bold">Yield:</label>
                 <input
@@ -231,7 +231,7 @@ function RecipeForm() {
         </div>
         {/*TODO: change for medium devices */}
         <div className="row mt-4">
-            <div className="col-md-4">
+            <div className="col-12 col-sm-4 ">
                 <div className="form-group">
                 <label htmlFor="prep" className="form-label fw-bold">Prep:</label>
                 <div className="input-group">
@@ -247,7 +247,7 @@ function RecipeForm() {
                 </div>
                 </div>
             </div>
-            <div className="col-4">
+            <div className="col-12 col-sm-4 ">
                 <div className="form-group">
                 <label htmlFor="cook" className="form-label fw-bold">Cook:</label>
                 <div className="input-group">
@@ -263,7 +263,7 @@ function RecipeForm() {
                 </div>
                 </div>
             </div>
-            <div className="col-4">
+            <div className="col-12 col-sm-4 ">
                 <div className="form-group">
                 <label htmlFor="total" className="form-label fw-bold">Total:</label>
                 <div className="input-group">

@@ -79,7 +79,7 @@ function UserProfile() {
     <div className="">
       <div className="container-fluid customBackground">
         <Navbar />
-        <div className="container pt-5 userProfileContainer">
+        <div className="container pt-3 userProfileContainer">
           <div className="row">
             <div className="col-4 leftPartProfile">
               <div className="centeredProfile">
@@ -108,7 +108,14 @@ function UserProfile() {
                           {isFollowing ? (
                             <button
                               onClick={handleUnfollow}
-                              className="btn btn-danger unfollowBtn"
+                              className="btn unfollowBtn fw-bold"
+                              style={{
+                                backgroundColor: "#fb2c2c",
+                                color: "#f2e1e1", 
+                                borderColor: "#db8484",
+                                borderRadius: "5px", 
+                                padding: "0.5rem 1rem", 
+                                }}
                             >
                               {followLoading ? (
                                 <div
@@ -125,7 +132,14 @@ function UserProfile() {
                           ) : (
                             <button
                               onClick={handleFollow}
-                              className="btn btn-primary followBtn"
+                              className="btn followBtn fw-bold"
+                              style={{
+                                backgroundColor: "#ffe6e0",
+                                color: "#fb2c2c", 
+                                borderColor: "#db8484",
+                                borderRadius: "5px", 
+                                padding: "0.5rem 2rem", 
+                                }}
                             >
                               {followLoading ? (
                                 <div
@@ -171,13 +185,12 @@ function UserProfile() {
                   {user && userInfo.user.id === user.id && (
                     <div className="theBtns">
                       <button style={{
-                            backgroundColor: "#f2c9d6",
-                            borderColor: "#acacac", 
-                            borderRadius: "5px", 
-                            padding: "0.5rem 1rem", 
-                            display: "flex",
-                            alignItems: "center"
-                            }}
+                          backgroundColor: "#ffe6e0",
+                          color: "#fb2c2c", 
+                          borderColor: "#db8484",
+                          borderRadius: "5px", 
+                          padding: "0.5rem 1rem", 
+                          }}
                       >
                         <Link to="/recipeForm" style={{
                             textDecoration: "none",
@@ -192,13 +205,11 @@ function UserProfile() {
                         className=""
                         onClick={handleFollowing}
                         style={{
-                          backgroundColor: "#f2c9d6",
+                          backgroundColor: "#f7dae3",
                           color: "#72615d", 
-                          borderColor: "#acacac", 
+                          borderColor: "#f59fb9", 
                           borderRadius: "5px", 
-                          padding: "0.5rem 0.5rem", 
-                          display: "flex",
-                          alignItems: "center"
+                          padding: "0.5rem 0.5rem"
                         }}
                       >
                         <b>Following List</b>

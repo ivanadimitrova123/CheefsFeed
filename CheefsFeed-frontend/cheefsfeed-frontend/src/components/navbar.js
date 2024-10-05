@@ -77,9 +77,9 @@ const Navbar = () => {
                     placeholder="Search..."
                   />
                   {searchText.length > 0 && (
-                    <div className="dropdown-menu show searchItemsList ps-1">
+                    <div className="dropdown-menu show searchItemsList py-3 px-2">
                       {/* Render found users */}
-                      {foundUsers.length > 0 && "Users"}
+                      {foundUsers.length > 0 && <h5>Users</h5>}
                       {foundUsers.map((user) => (
                         <span
                           className="dropdown-item"
@@ -98,14 +98,14 @@ const Navbar = () => {
                                   : `${baseUrl}/default.jpg`
                               }
                               alt="profile-pic"
-                              style={{ width: "30px", height: "30px" }}
+                              style={{ width: "50px", height: "40px" }} className="me-2"
                             />{" "}
                             {user.username}
                           </div>
                         </span>
                       ))}
                       {/* Render found recipes */}
-                      {foundRecipes.length > 0 && "Recipes"}
+                      {foundRecipes.length > 0 && <h5>Recipes</h5>}
                       {foundRecipes.map((recipe) => (
                         <span
                           className="dropdown-item"
@@ -121,7 +121,7 @@ const Navbar = () => {
                             <img
                               src={recipe.picture}
                               alt="profile-pic"
-                              style={{ width: "30px", height: "30px" }}
+                              style={{ width: "50px", height: "40px" }}  className="me-2"
                             />{" "}
                             {recipe.name}
                           </div>
@@ -174,6 +174,7 @@ const Navbar = () => {
                         Profile
                       </NavDropdown.Item>
                       {userInfo.user.role === "Admin" && (
+                        <>
                         <NavDropdown.Item
                           onClick={() => {
                             navigate(`/admin/dashboard`);
@@ -181,6 +182,14 @@ const Navbar = () => {
                         >
                           Dashboard
                         </NavDropdown.Item>
+                        <NavDropdown.Item
+                        onClick={() => {
+                          navigate(`/addCategory`);
+                        }}
+                      >
+                        Add Category
+                      </NavDropdown.Item>
+                      </>
                       )}
 
                       <NavDropdown.Divider />

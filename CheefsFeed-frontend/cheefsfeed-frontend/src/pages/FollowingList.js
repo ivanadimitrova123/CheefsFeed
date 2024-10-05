@@ -68,7 +68,7 @@ function FollowingList() {
                         : user.picture
                     }
                     alt={user.username}
-                    style={{ width: "50px", height: "50px", marginRight: "15px" }}
+                    style={{ width: "60px", height: "50px", marginRight: "15px" }}
                   />
                   <h3 className="mb-0">{user.username}</h3>
                 </div>

@@ -142,48 +142,47 @@ const Dashboard = () => {
                 key={c.commentId}
                 style={{
                   border: "1px solid black",
-                  display: "flex",
-                  justifyContent: "space-between",
-                  alignItems: "center",
                   padding: "10px",
                 }}
               >
-                <div>
-                  <img
-                    src={c.user.img}
-                    alt="profile"
-                    style={{ width: "30px", height: "30px" }}
-                  />
-                  <b className="ms-2">{c.user.username}</b>
-                  <span className="ms-3">{c.comment.content}</span>
-                </div>
-                <div>
-                  <button
-                    className="me-2 btn btn-primary"
-                    onClick={() => navigate(`/recipeDetails/${c.comment.recipeId}`)}
-                  >
-                    View
-                  </button>
-                  <button
-                    className="me-2 btn btn-danger"
-                    onClick={() => deleteHandler(c.commentId)}
-                  >
-                    {commentDeleteLoading ? (
-                      <Spinner style={{ width: "1rem", height: "1rem" }} />
-                    ) : (
-                      "Delete"
-                    )}
-                  </button>
-                  <button
-                    className="me-2 btn btn-success"
-                    onClick={() => allowComment(c.commentId)}
-                  >
-                    {commentAllowLoading ? (
-                      <Spinner style={{ width: "1rem", height: "1rem" }} />
-                    ) : (
-                      "Allow"
-                    )}
-                  </button>
+                <div className="row">
+                  <div className="col-12 col-xxl-8">
+                    <img
+                      src={c.user.img}
+                      alt="profile"
+                      style={{ width: "30px", height: "30px" }}
+                    />
+                    <b className="ms-2">{c.user.username}</b>
+                    <span className="ms-3">{c.comment.content}</span>
+                  </div>
+                  <div className="col-12 col-xxl-4 mt-3 mt-xxl-0">
+                    <button
+                      className="me-2 btn btn-primary"
+                      onClick={() => navigate(`/recipeDetails/${c.comment.recipeId}`)}
+                    >
+                      View
+                    </button>
+                    <button
+                      className="me-2 btn btn-danger"
+                      onClick={() => deleteHandler(c.commentId)}
+                    >
+                      {commentDeleteLoading ? (
+                        <Spinner style={{ width: "1rem", height: "1rem" }} />
+                      ) : (
+                        "Delete"
+                      )}
+                    </button>
+                    <button
+                      className="me-2 btn btn-success"
+                      onClick={() => allowComment(c.commentId)}
+                    >
+                      {commentAllowLoading ? (
+                        <Spinner style={{ width: "1rem", height: "1rem" }} />
+                      ) : (
+                        "Allow"
+                      )}
+                    </button>
+                  </div>
                 </div>
               </div>
             ))}
@@ -206,13 +205,11 @@ const Dashboard = () => {
                 key={r.recipeId}
                 style={{
                   border: "1px solid black",
-                  display: "flex",
-                  justifyContent: "space-between",
-                  alignItems: "center",
                   padding: "10px",
                 }}
               >
-                <div>
+                <div className="row">
+                <div className="col-12 col-xxl-8">
                   <img
                     src={r.img}
                     alt="profile"
@@ -220,7 +217,7 @@ const Dashboard = () => {
                   />
                   <b className="ms-2">{r.name}</b>
                 </div>
-                <div>
+                <div className="col-12 col-xxl-4 mt-3 mt-xxl-0">
                   <button
                     className="me-2 btn btn-primary"
                     onClick={() => navigate(`/recipeDetails/${r.recipeId}`)}
@@ -247,6 +244,7 @@ const Dashboard = () => {
                       "Allow"
                     )}
                   </button>
+                </div>
                 </div>
               </div>
             ))}

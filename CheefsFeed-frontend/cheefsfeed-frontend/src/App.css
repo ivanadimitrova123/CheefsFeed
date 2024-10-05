@@ -316,17 +316,6 @@ nav {
   border-radius: 10px;
 }
 
-.followBtn {
-  background-color: #0003ff !important;
-  padding: 3px 30px 3px 30px;
-}
-
-.unfollowBtn {
-  background: #f00 !important;
-  color: white;
-  padding: 3px 30px 3px 30px;
-}
-
 .previewRecipe {
   display: flex;
   align-items: center;
@@ -464,8 +453,9 @@ ul.navbar-nav {
 .navbar .searchNav {
   border: 2px solid rgba(255, 0, 0, 0.407);
   border-radius: 5px;
-  padding-left: 10px;
+  padding-left: 25px;
   padding-bottom: 4px;
+  width: 350px;
 }
 
 .navbar .searchNav:focus {
@@ -572,6 +562,7 @@ form.recipeDetailsForm {
 
 .customBackground {
   background-color: #f3f3f3;
+  min-height: 1000px;
   height: 100%;
 }
 
@@ -758,10 +749,6 @@ form.recipeDetailsForm {
   flex-direction: row;
 }
 
-.ingredients {
-  width: 50%;
-}
-
 .ingredients ul li::marker {
   display: none;
 }
@@ -784,11 +771,6 @@ form.recipeDetailsForm {
   top: 5px;
   bottom: 0px;
   background-size: contain;
-}
-
-.directions {
-  /* width: 50%; */
-  width: 100%;
 }
 
 .numberedTiming p {

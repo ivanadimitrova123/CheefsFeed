@@ -367,9 +367,9 @@ const RecipeDetails = () => {
                 </div>
               </div>
             </div>
-            <div className="recipe-actions d-flex align-items-center  mt-4">
+            <div className="recipe-actions d-flex align-items-center mt-4 row">
                 {/* Recipe rating */}
-                <div className="numbered-timing me-5">
+                <div className="numbered-timing me-5 col-12 col-md-4">
                     <div className="second-time newRating">
                     <p className="fs-5">
                         Rating: <span>{parseFloat(recipe.rating).toFixed(2)}</span>
@@ -385,7 +385,7 @@ const RecipeDetails = () => {
                     </div>
                 </div>
                 {/* Buttons */}
-                <div className="actionShareBtn d-flex">
+                <div className="actionShareBtn d-flex col-12 col-md-8">
                     <Button className="button-fav me-2 fw-bold" onClick={saveRecipe}
                         style={{
                             backgroundColor: "#ffdcd5",
@@ -441,13 +441,9 @@ const RecipeDetails = () => {
               <PopularRecipes recipes={popularRecipes.slice(0, 3)} />
             </div>
             {/* Recipe description and ingredients */}
-            <div className="description-for-recipe mt-4 d-flex">
-                <div className="directions">
-                  <h5>Directions</h5>
-                  <p>{recipe.description}</p>
-                </div>
-                <div className="groupedClasses">
-                  <div className="ingredients">
+            <div className="description-for-recipe mt-4 d-flex row">
+            <div className="groupedClasses col-12 col-sm-6 col-lg-5">
+                  <div className="ingredients ">
                     <h5>Ingredients:</h5>
                     <ul>
                       {recipe.ingredients.map((ingredient, index) => (
@@ -456,6 +452,11 @@ const RecipeDetails = () => {
                     </ul>
                   </div>
                 </div>
+                <div className="directions col-12 col-sm-6 col-lg-7">
+                  <h5>Directions</h5>
+                  <p>{recipe.description}</p>
+                </div>
+                
             </div>
             {/* User rating and save recipe button */}
             {userInfo.user.id !== recipe.user.id && (

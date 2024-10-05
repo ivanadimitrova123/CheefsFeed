@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 const PopularRecipes = ({ recipes }) => {
   const navigate = useNavigate();
   return (
-    <div className="recommendedBox">
+    <div className="recommendedBox d-none d-xl-block">
       <h3>Popular Recipe</h3>
       <ul>
         {recipes &&

@@ -11,7 +11,7 @@ const RecomendedRecipes = ({ recipes }) => {
       <div className="image-slider">
         {recipes &&
           recipes.map((recipe) => (
-            <div
+            <div 
               key={recipe.id}
               className="cardItemFood"
               onClick={() => navigate(`/recipeDetails/${recipe.id}`)}

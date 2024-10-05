@@ -11,6 +11,7 @@ import FollowingList from "./pages/FollowingList";
 import RecipeDetails from './pages/RecipeDetails';
 import SavedRecipes from './pages/SavedRecipes';
 import UserProfile from "./pages/UserProfile";
+import AddCategory from './pages/AddCategory';
 import RecipeForm from "./pages/RecipeForm";
 import Dashboard from './pages/Dashboard';
 import Register from "./pages/Register";
@@ -29,8 +30,9 @@ function App() {
         <Route path="/userProfile/:id" element={<UserProfile />} />
         <Route path="/recipeForm/:id" element={<RecipeForm />} />
         <Route path='/savedRecipes' element={<SavedRecipes/>}/>
-        <Route path="/recipeForm" element={<RecipeForm />} />
         <Route path='/admin/dashboard' element={<Dashboard/>}/>
+        <Route path="/addCategory" element={<AddCategory/>} />
+        <Route path="/recipeForm" element={<RecipeForm />} />
         <Route path="/register" element={<Register/>} />
         <Route path="/login" element={<LogIn/>} />
         <Route path="/feed" element={<Feed/>} />
