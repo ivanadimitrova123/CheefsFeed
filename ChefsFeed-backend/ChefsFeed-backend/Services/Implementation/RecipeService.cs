@@ -177,9 +177,9 @@ namespace ChefsFeed_backend.Services.Implementation
                 recipe.PictureId = picture.Id;
             }
 
-            recipe.Name = updatedRecipe.Name;
             recipe.Description = updatedRecipe.Description;
             recipe.Ingredients = updatedRecipe.Ingredients;
+            recipe.Name = updatedRecipe.Name + "_ID";
             recipe.Level = updatedRecipe.Level;
             recipe.Cook = updatedRecipe.Cook;
             recipe.Prep = updatedRecipe.Prep;
