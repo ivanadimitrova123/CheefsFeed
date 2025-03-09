@@ -179,7 +179,7 @@ namespace ChefsFeed_backend.Services.Implementation
 
             recipe.Description = updatedRecipe.Description;
             recipe.Ingredients = updatedRecipe.Ingredients;
-            recipe.Name = updatedRecipe.Name + "_Whatever_ID";
+            recipe.Name = updatedRecipe.Name;
             recipe.Level = updatedRecipe.Level;
             recipe.Cook = updatedRecipe.Cook;
             recipe.Prep = updatedRecipe.Prep;
